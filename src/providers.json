@@ -1,0 +1,17 @@
+[{
+    "name": "Provider 1",
+    "ll": [49.1972, -0.3268],
+    "city": "Caen",
+    "country": "France",
+    "apps": [
+        "core", "contacts", "calendar", "spreed", "mail"
+    ]
+}, {
+    "name": "Provider 2",
+    "ll": [48.8567, 2.3508],
+    "city": "Paris",
+    "country": "France",
+    "apps": [
+        "core", "contacts", "calendar"
+    ]
+}]
