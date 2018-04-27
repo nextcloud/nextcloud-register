@@ -5,10 +5,12 @@
 		<h3>{{provider.name}}</h3>
 		<p class="summary">{{provider.details}}</p>
 		<div class="location">
-			<span class="city-country">{{provider.city}}
-				<img :alt="provider.country" :title="provider.country"
-					 :src="'/wp-content/themes/nextcloud.com/assets/img/flags/'+provider.countryCode+'.gif'"/>
+			<span class="country">
+				<img v-for="(country, key) in provider.flags" :key="key"
+					 :alt="country" :title="country"
+					 :src="'/wp-content/themes/nextcloud.com/assets/img/flags/'+country+'.gif'"/>
 			</span>
+			<span class="city">{{provider.city}}</span>
 			<span class="distance">{{distance}}</span>
 		</div>
 		<div class="apps">
@@ -70,6 +72,9 @@ export default {
 	},
 	methods: {
 		selectProvider() {
+			if (this.selected === this.provider) {
+				return;
+			}
 			this.selected = this.provider;
 			this.showAll = !this.showAll;
 			VueScrollTo.scrollTo('#register', 500, {offset: -50});
@@ -96,9 +101,9 @@ export default {
 	transition: all 0.2s ease-in;
 	&:not(.selected-provider) {
 		cursor: pointer;
-		box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+		filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.4));
 		&:hover {
-			box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.5);
+			filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
 		}
 	}
 	h3 {
@@ -127,13 +132,14 @@ export default {
 		position: absolute;
 		top: 10px;
 		right: 10px;
-		.city-country {
+		span {
 			display: flex;
+			height: 25px;
 			align-items: center;
 			justify-content: flex-end;
-			img {
-				margin-left: 5px;
-			}
+		}
+		.country img {
+			margin-left: 5px;
 		}
 	}
 	.apps {

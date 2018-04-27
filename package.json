@@ -7,10 +7,11 @@
     "private": true,
     "scripts": {
         "dev": "cross-env NODE_ENV=development webpack",
-        "watch": "cross-env NODE_ENV=development webpack --progress --watch",
+        "watch": "cross-env NODE_ENV=development webpack --progress --watch --hide-modules",
         "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
     },
     "dependencies": {
+        "axios": "^0.18.0",
         "vue": "^2.5.11",
         "vue-scrollto": "^2.11.0"
     },
