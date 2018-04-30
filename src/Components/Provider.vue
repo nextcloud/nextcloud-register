@@ -2,34 +2,68 @@
 	<!-- do not show selected -->
 	<div class="provider" :style="{order:order}"
 		 @click="selectProvider" v-if="selected !== provider || show">
-		<h3>{{provider.name}}</h3>
-		<p class="summary">{{provider.details}}</p>
-		<div class="location">
-			<span class="country">
-				<img v-for="(country, key) in provider.flags" :key="key"
-					 :alt="country" :title="country"
-					 :src="'/wp-content/themes/nextcloud.com/assets/img/flags/'+country+'.gif'"/>
-			</span>
-			<span class="city">{{provider.city}}</span>
-			<span class="distance">{{distance}}</span>
-		</div>
-		<div class="apps">
-			<!-- core is un-removable -->
-			<img alt="Files" height="16" width="16"
-				 src="/wp-content/themes/nextcloud.com/assets/img/apps/core.svg"/>
-			<img v-for="(app, key) in provider.apps" :key="key"
-				 :alt="app" height="16" width="16" v-if="officialApps.indexOf(app)>=0"
-				 :src="'/wp-content/themes/nextcloud.com/assets/img/apps/'+app+'.svg'"/>
-		</div>
+
+		<!-- loading svg while computing closest provider -->
+		<template v-if="!init">
+			<content-loader
+				:height="75"
+				:width="460"
+				:speed="2"
+				primaryColor="#bbb"
+				secondaryColor="#ccc"
+			>
+				<!-- h3 -->
+				<rect x="0" y="0" rx="3" ry="3" width="150" height="22" /> 
+				<!-- p -->
+				<rect x="0" y="30" rx="3" ry="3" width="200" height="16" /> 
+				<!-- apps -->
+				<rect x="0" y="59" rx="3" ry="3" width="50" height="16" /> 
+				<!-- flags -->
+				<rect x="444" y="6" rx="1" ry="1" width="16" height="11" /> 
+				<rect x="423" y="6" rx="1" ry="1" width="16" height="11" /> 
+				<rect x="402" y="6" rx="1" ry="1" width="16" height="11" /> 
+				<!-- city -->
+				<rect x="410" y="30" rx="3" ry="3" width="50" height="16" /> 
+				<!-- distance -->
+				<rect x="420" y="53" rx="3" ry="3" width="40" height="16" />
+			</content-loader>
+		</template>
+
+		<!-- default template if all data loaded -->
+		<template v-else>
+			<h3>{{provider.name}}</h3>
+			<p class="summary">{{provider.details}}</p>
+			<div class="location">
+				<span class="country">
+					<img v-for="(country, key) in provider.flags" :key="key"
+						:alt="country" :title="country"
+						:src="'/wp-content/themes/nextcloud.com/assets/img/flags/'+country+'.gif'"/>
+				</span>
+				<span class="city">{{provider.city}}</span>
+				<span class="distance">{{distance}}</span>
+			</div>
+			<div class="apps">
+				<!-- core is un-removable -->
+				<img alt="Files" height="16" width="16"
+					src="/wp-content/themes/nextcloud.com/assets/img/apps/core.svg"/>
+				<img v-for="(app, key) in provider.apps" :key="key"
+					:alt="app" height="16" width="16" v-if="officialApps.indexOf(app)>=0"
+					:src="'/wp-content/themes/nextcloud.com/assets/img/apps/'+app+'.svg'"/>
+			</div>
+		</template>
+
 	</div>
 </template>
 <script>
 import VueScrollTo from 'vue-scrollto';
+import { ContentLoader } from 'vue-content-loader'
 
 export default {
 	name: 'provider',
-	props: ['provider', 'show'],
-	methods: {},
+	props: ['provider', 'show', 'init'],
+	components: {
+		ContentLoader
+	},
 	data() {
 		return {
 			officialApps: ['contacts', 'calendar', 'spreed', 'mail', 'tasks']
@@ -106,6 +140,10 @@ export default {
 			filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
 		}
 	}
+	// loading svg
+	svg {
+		width: 460px;
+	}
 	h3 {
 		margin: 0;
 		flex-grow: 1;
@@ -113,6 +151,8 @@ export default {
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		font-size: 22px;
+		line-height: 22px;
+		margin-bottom: 8px;
 	}
 	p.summary {
 		font-weight: 100;

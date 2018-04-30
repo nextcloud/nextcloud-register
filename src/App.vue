@@ -1,17 +1,21 @@
 <template>
-	<div id="register" class="container revealOnLoad">
-		<provider :provider="selected" :show="true" class="selected-provider" />
-		<div id="show-more" class="button--dropdown" :class="{opened: showAll, fadeout: loading}"
-			 @click="toggleShowAll"><span>{{showAll ? 'close' : 'change provider'}}</span></div>
-		<form id="form" @submit.prevent="register" ref="register">
+	<div id="register" class="container revealOnLoad" :class="{'init': init}">
+		<provider :provider="selected" :show="true" :init="init" class="selected-provider" />
+		<div id="show-more" @click="toggleShowAll"
+			 :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}">
+			<span v-if="init">
+				 {{showAll ? 'close' : 'change provider'}}
+			</span>
+		</div>
+		<form id="form" @submit.prevent="register" ref="register" :disabled="!init">
 			<div class="email" :class="{'icon-loading-small-dark': loading}">
-				<input type="email" required value="" placeholder="Your email address" id="emailprovider" />
-				<input type="submit" class="btn btn-primary" :value="signUp" />
+				<input type="email" required value="" placeholder="Your email address" id="emailprovider" :disabled="!init" />
+				<input type="submit" class="btn btn-primary" :value="signUp" :disabled="!init||loading" />
 			</div>
 			<div class="newsletter"></div>
 		</form>
 		<div id="providers" v-if="showAll===true">
-			<provider v-for="(provider, key) in providers" :key="key" :provider="provider" />
+			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" />
 		</div>
 	</div>
 </template>
@@ -30,10 +34,11 @@ export default {
 		return {
 			// Default nextcloud location
 			ll: [48.7871141, 9.1547062],
-			selected: false,
-			showAll: false,
-			loading: false,
-			providers: []
+			selected: false,	// current selected provider
+			showAll: false,		// show all providers toggle
+			loading: false,		// submit loading
+			init: false,		// page init loading
+			providers: []		// empty providers list
 		};
 	},
 	beforeMount() {
@@ -64,7 +69,7 @@ export default {
 		},
 		// toggle showAll
 		toggleShowAll() {
-			if (this.loading) {
+			if (this.loading || !this.init) {
 				this.showAll = false;
 				return;
 			}
@@ -122,6 +127,7 @@ export default {
 					this.selected = provider;
 				}
 			});
+			this.init = true;
 		}
 	}
 };
@@ -195,6 +201,9 @@ export default {
 	top: 30vh;
 	width: 100%;
 	padding: 0 10px;
+	&[disabled] {
+		opacity: .65;
+	}
 }
 .email {
 	display: flex;
@@ -214,9 +223,12 @@ export default {
 			border-radius: 22px 0 0 22px;
 		}
 		&[type='submit'] {
-			background-image: url('/wp-content/themes/nextcloud.com/assets/img/arrow_right.svg');
 			background-position: calc(100% - 20px) center;
 			background-repeat: no-repeat;
+			opacity: 1;
+		}
+		&[type='submit']:not(:disabled) {
+			background-image: url('/wp-content/themes/nextcloud.com/assets/img/arrow_right.svg');
 		}
 	}
 	> .btn-primary {
