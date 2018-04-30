@@ -9,7 +9,7 @@
 		</div>
 		<form id="form" @submit.prevent="register" ref="register" :disabled="!init">
 			<div class="email" :class="{'icon-loading-small-dark': loading}">
-				<input type="email" required value="" placeholder="Your email address" id="emailprovider" :disabled="!init" />
+				<input type="email" ref="email" required value="" placeholder="Your email address" id="emailprovider" :disabled="!init" />
 				<input type="submit" class="btn btn-primary" :value="signUp" :disabled="!init||loading" />
 			</div>
 			<div class="newsletter"></div>
@@ -38,7 +38,8 @@ export default {
 			showAll: false,		// show all providers toggle
 			loading: false,		// submit loading
 			init: false,		// page init loading
-			providers: []		// empty providers list
+			providers: [],		// empty providers list
+			created: false		// is the account creation successful
 		};
 	},
 	beforeMount() {
@@ -50,7 +51,9 @@ export default {
 	},
 	computed: {
 		signUp() {
-			if (this.loading) {
+			if (this.created) {
+				return 'Success! Redirecting you to the provider';
+			} else if (this.loading) {
 				return 'Creating your account';
 			}
 			return 'Sign Up';
@@ -58,7 +61,7 @@ export default {
 	},
 	methods: {
 		getProviders() {
-			axios.get('/wp-content/themes/nextcloud.com/assets/preferred.json').then((response) => {
+			axios.get('/wp-json/register/providers').then((response) => {
 				this.providers = response.data;
 				this.scoreProvider(this.ll[0], this.ll[1]);
 			})
@@ -66,6 +69,17 @@ export default {
 		// submit
 		register() {
 			this.toggleLoading();
+			let email = this.$refs.email.value;
+			let id = this.providers.findIndex((provider) => {
+				return provider === this.selected;
+			});
+			// success! redirection...
+			axios.post('/wp-json/register/account', {email, id}).then((response) => {
+				this.created = true;
+				setTimeout(() => {
+					window.location = response.data
+				}, 2000);
+			})
 		},
 		// toggle showAll
 		toggleShowAll() {

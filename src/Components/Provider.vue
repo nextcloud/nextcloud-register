@@ -107,12 +107,13 @@ export default {
 	methods: {
 		selectProvider() {
 			if (this.selected === this.provider) {
+				window.emailprovider.focus();
 				return;
 			}
 			this.selected = this.provider;
 			this.showAll = !this.showAll;
 			VueScrollTo.scrollTo('#register', 500, {offset: -50});
-			window.emailprovider.focus()
+			window.emailprovider.focus();
 		}
 	}
 };
@@ -124,14 +125,13 @@ export default {
 	margin: 10px;
 	padding: 10px;
 	position: relative;
-	padding-right: 110px;
 	// override display block after animation
-	display: flex !important;
-	flex-wrap: wrap;
-	flex-shrink: 0;
+	display: grid !important;
+	grid-template-columns: 1fr auto;
+	grid-auto-flow: column;
+	grid-column-gap: 10px;
 	border-radius: 5px;
 	user-select: none;
-	flex-direction: column;
 	transition: all 0.2s ease-in;
 	&:not(.selected-provider) {
 		cursor: pointer;
@@ -152,7 +152,8 @@ export default {
 		text-overflow: ellipsis;
 		font-size: 22px;
 		line-height: 22px;
-		margin-bottom: 8px;
+		margin-bottom: 6px;
+		color: #555;
 	}
 	p.summary {
 		font-weight: 100;
@@ -163,20 +164,22 @@ export default {
 		text-overflow: ellipsis;
 		text-align: justify;
 		margin-top: 0;
+		color: #555;
 	}
 	.location {
 		display: flex;
 		flex-direction: column;
 		text-align: right;
 		opacity: 0.7;
-		position: absolute;
-		top: 10px;
-		right: 10px;
+		grid-column: 3;
+		// h3 + p + apps
+		grid-row: span 3; 
 		span {
 			display: flex;
 			height: 25px;
 			align-items: center;
 			justify-content: flex-end;
+			white-space: nowrap;
 		}
 		.country img {
 			margin-left: 5px;
