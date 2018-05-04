@@ -56,7 +56,7 @@
 </template>
 <script>
 import VueScrollTo from 'vue-scrollto';
-import { ContentLoader } from 'vue-content-loader'
+import { ContentLoader } from 'vue-content-loader';
 
 export default {
 	name: 'provider',
@@ -71,8 +71,9 @@ export default {
 	},
 	computed: {
 		distance() {
+			// Don't display distance bigger than 1000km
 			if (
-				this.provider.score <= 500 &&
+				this.provider.score <= 1000 &&
 				typeof this.provider.score === 'number'
 			) {
 				return this.provider.score + 'km';
@@ -112,7 +113,7 @@ export default {
 			}
 			this.selected = this.provider;
 			this.showAll = !this.showAll;
-			VueScrollTo.scrollTo('#register', 500, {offset: -50});
+			VueScrollTo.scrollTo('#register', 500, { offset: -50 });
 			window.emailprovider.focus();
 		}
 	}
@@ -173,7 +174,7 @@ export default {
 		opacity: 0.7;
 		grid-column: 3;
 		// h3 + p + apps
-		grid-row: span 3; 
+		grid-row: span 3;
 		span {
 			display: flex;
 			height: 25px;

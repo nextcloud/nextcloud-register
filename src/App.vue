@@ -8,7 +8,7 @@
 			</span>
 		</div>
 		<form id="form" @submit.prevent="register" ref="register" :disabled="!init">
-			<div class="email" :class="{'icon-loading-small-dark': loading}">
+			<div class="email" :class="{'icon-loading-small-dark': loading, error: error}">
 				<input type="email" ref="email" required value="" placeholder="Your email address" id="emailprovider" :disabled="!init" />
 				<input type="submit" class="btn btn-primary" :value="signUp" :disabled="!init||loading" />
 			</div>
@@ -34,12 +34,13 @@ export default {
 		return {
 			// Default nextcloud location
 			ll: [48.7871141, 9.1547062],
-			selected: false,	// current selected provider
-			showAll: false,		// show all providers toggle
-			loading: false,		// submit loading
-			init: false,		// page init loading
-			providers: [],		// empty providers list
-			created: false		// is the account creation successful
+			selected: false, // current selected provider
+			showAll: false, // show all providers toggle
+			loading: false, // submit loading
+			init: false, // page init loading
+			providers: [], // empty providers list
+			created: false, // is the account creation successful
+			error: false // is the request successful
 		};
 	},
 	beforeMount() {
@@ -53,6 +54,8 @@ export default {
 		signUp() {
 			if (this.created) {
 				return 'Success! Redirecting you to the provider';
+			} else if (this.error !== false) {
+				return 'Error: ' + this.error;
 			} else if (this.loading) {
 				return 'Creating your account';
 			}
@@ -61,25 +64,42 @@ export default {
 	},
 	methods: {
 		getProviders() {
-			axios.get('/wp-json/register/providers').then((response) => {
+			axios.get('/wp-json/register/providers').then(response => {
 				this.providers = response.data;
 				this.scoreProvider(this.ll[0], this.ll[1]);
-			})
+			});
 		},
 		// submit
 		register() {
+			if (this.error !== false) {
+				// user clicked again, let's reset the error
+				this.loading = false;
+				this.error = false;
+				return;
+			}
 			this.toggleLoading();
+			this.showAll = false;
 			let email = this.$refs.email.value;
-			let id = this.providers.findIndex((provider) => {
+			let id = this.providers.findIndex(provider => {
 				return provider === this.selected;
 			});
 			// success! redirection...
-			axios.post('/wp-json/register/account', {email, id}).then((response) => {
-				this.created = true;
-				setTimeout(() => {
-					window.location = response.data
-				}, 2000);
-			})
+			axios
+				.post('/wp-json/register/account', { email, id })
+				.then(response => {
+					this.created = true;
+					setTimeout(() => {
+						window.location = response.data;
+					}, 2000);
+				})
+				.catch(error => {
+					this.error = error.response.data.message;
+					this.loading = false;
+					setTimeout(() => {
+						this.showAll = true;
+						this.error = false;
+					}, 4000);
+				});
 		},
 		// toggle showAll
 		toggleShowAll() {
@@ -121,7 +141,7 @@ export default {
 			this.providers.forEach((provider, index) => {
 				let mindifprov = 99999;
 				// let's test all of the locations and use the closest one as default for this provider
-				provider.ll.forEach(({lat, long, city}) => {
+				provider.ll.forEach(({ lat, long, city }) => {
 					let dif = this.pythagorasEquirectangular(
 						latitude,
 						longitude,
@@ -153,6 +173,7 @@ export default {
 	max-width: 100vw;
 	position: relative;
 	margin-top: -195px;
+	margin-bottom: 20px;
 	padding: 0;
 	transform: translateY(15px);
 	opacity: 0;
@@ -216,7 +237,7 @@ export default {
 	width: 100%;
 	padding: 0 10px;
 	&[disabled] {
-		opacity: .65;
+		opacity: 0.65;
 	}
 }
 .email {
@@ -253,7 +274,8 @@ export default {
 			background-position: calc(100% - 10px) center;
 		}
 	}
-	&.icon-loading-small-dark {
+	&.icon-loading-small-dark,
+	&.error {
 		&::after {
 			left: calc(100% - 32px);
 			box-sizing: content-box;
