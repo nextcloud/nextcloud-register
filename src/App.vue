@@ -40,11 +40,13 @@ export default {
 			init: false, // page init loading
 			providers: [], // empty providers list
 			created: false, // is the account creation successful
-			error: false // is the request successful
+			error: false, // is the request successful
+			ocsapi: false // is the request successful
 		};
 	},
 	beforeMount() {
 		let location = JSON.parse(window.register.dataset.ll);
+		this.ocsapi = window.register.dataset.ocsapi === '1';
 		if (location.latitude && location.longitude) {
 			this.ll = [location.latitude, location.longitude];
 		}
@@ -85,7 +87,7 @@ export default {
 			});
 			// success! redirection...
 			axios
-				.post('/wp-json/register/account', { email, id })
+				.post('/wp-json/register/account', { email, id, ocsapi: this.ocsapi })
 				.then(response => {
 					this.created = true;
 					setTimeout(() => {

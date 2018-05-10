@@ -72,10 +72,9 @@ export default {
 	computed: {
 		distance() {
 			// Don't display distance bigger than 1000km
-			if (
-				this.provider.score <= 1000 &&
-				typeof this.provider.score === 'number'
-			) {
+			if (this.provider.score <= 100) {
+				return '< 100km';
+			} else if (this.provider.score <= 1000) {
 				return this.provider.score + 'km';
 			} else {
 				return 'Far far away';
