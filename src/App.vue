@@ -195,39 +195,38 @@ export default {
 }
 #show-more {
 	$height: 20px;
-	height: $height * 2 + 10px;
+	height: $height * 2;
+	margin-bottom: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
 	text-align: center;
 	font-weight: 100;
 	cursor: pointer;
 	position: relative;
-	opacity: 1;
+	opacity: .5;
 	box-sizing: content-box;
 	color: #fff;
 	transition: all 0.2s ease-in;
 	span {
 		height: $height;
-		transition: all 0.2s ease-in;
 		display: block;
 		line-height: $height;
 	}
-	&:hover::before {
-		top: $height + 2px;
-	}
 	&::before {
-		transition: all 0.2s ease-in;
 		right: 50%;
-		margin-right: -10px;
-		top: $height;
-		height: $height;
+		transform: translateX(50%);
+		margin-right: -90px;
+	}
+	&:hover,
+	&.opened {
+		opacity: .7;
 	}
 	&.opened {
-		span {
-			padding-top: $height;
-		}
 		&::before {
 			transform: scaleY(-1);
-			top: 0;
+			margin-right: -55px;
 		}
 	}
 	&.fadeout {

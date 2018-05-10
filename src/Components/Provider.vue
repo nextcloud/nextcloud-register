@@ -170,7 +170,6 @@ export default {
 		display: flex;
 		flex-direction: column;
 		text-align: right;
-		opacity: 0.7;
 		grid-column: 3;
 		// h3 + p + apps
 		grid-row: span 3;
@@ -180,6 +179,9 @@ export default {
 			align-items: center;
 			justify-content: flex-end;
 			white-space: nowrap;
+		}
+		span:not(.country) {
+			opacity: .5;
 		}
 		.country img {
 			margin-left: 5px;
