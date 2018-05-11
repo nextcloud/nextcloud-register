@@ -170,18 +170,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#register {
-	width: 500px;
-	max-width: 100vw;
-	position: relative;
-	margin-top: -195px;
-	margin-bottom: 20px;
-	padding: 0;
-	transform: translateY(15px);
-	opacity: 0;
-	animation: 1s ease-out 3s 1 slideUpOnLoad;
-	animation-fill-mode: forwards;
-}
 #providers {
 	display: flex;
 	flex-direction: column;
