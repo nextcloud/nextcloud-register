@@ -35,20 +35,20 @@
 			<p class="summary">{{provider.details}}</p>
 			<div class="location">
 				<span class="country">
-					<img v-for="(country, key) in provider.flags" :key="key"
-						:alt="country" :title="country"
-						:src="'/wp-content/themes/nextcloud.com/assets/img/flags/'+country+'.gif'"/>
+					<span v-for="(country, key) in provider.flags" :key="key"
+						:title="country"
+						:class="'flag-'+country"/>
 				</span>
 				<span class="city">{{provider.city}}</span>
 				<span class="distance">{{distance}}</span>
 			</div>
 			<div class="apps">
 				<!-- core is un-removable -->
-				<img alt="Files" height="16" width="16"
-					src="/wp-content/themes/nextcloud.com/assets/img/apps/core.svg"/>
-				<img v-for="(app, key) in provider.apps" :key="key"
-					:alt="app" height="16" width="16" v-if="officialApps.indexOf(app)>=0"
-					:src="'/wp-content/themes/nextcloud.com/assets/img/apps/'+app+'.svg'"/>
+				<span title="Files" height="16" width="16"
+					class="app-core"></span>
+				<span v-for="(app, key) in provider.apps" :key="key"
+					:title="app" height="16" width="16" v-if="officialApps.indexOf(app)>=0"
+					:class="'app-'+app"></span>
 			</div>
 		</template>
 
@@ -180,17 +180,18 @@ export default {
 			justify-content: flex-end;
 			white-space: nowrap;
 		}
-		span:not(.country) {
+		> span:not(.country) {
 			opacity: .5;
 		}
-		.country img {
+		.country span {
 			margin-left: 5px;
+			display: block;
 		}
 	}
 	.apps {
 		flex: 0 0 100%;
 		display: flex;
-		img {
+		span {
 			margin-right: 5px;
 			opacity: 0.5;
 		}
