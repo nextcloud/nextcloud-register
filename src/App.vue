@@ -1,5 +1,13 @@
 <template>
 	<div id="register" class="container revealOnLoad" :class="{'init': init}">
+		<form id="form" @submit.prevent="register" ref="register" :disabled="!init">
+			<div class="email" :class="{'icon-loading-small-dark': loading, error: error}">
+				<input type="email" ref="email" required value="" placeholder="Your email address" id="emailprovider" :disabled="!init" />
+				<label for="submit-registration" class="btn btn-primary" :disabled="!init||loading">{{signUp}}</label>
+				<input type="submit" class="hidden" id="submit-registration" :value="signUp" :disabled="!init||loading" />
+			</div>
+			<div class="newsletter"></div>
+		</form>
 		<provider :provider="selected" :show="true" :init="init" class="selected-provider" />
 		<div id="show-more" @click="toggleShowAll"
 			 :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}">
@@ -7,13 +15,6 @@
 				 {{showAll ? 'close' : 'change provider'}}
 			</span>
 		</div>
-		<form id="form" @submit.prevent="register" ref="register" :disabled="!init">
-			<div class="email" :class="{'icon-loading-small-dark': loading, error: error}">
-				<input type="email" ref="email" required value="" placeholder="Your email address" id="emailprovider" :disabled="!init" />
-				<input type="submit" class="btn btn-primary" :value="signUp" :disabled="!init||loading" />
-			</div>
-			<div class="newsletter"></div>
-		</form>
 		<div id="providers" v-if="showAll===true">
 			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" />
 		</div>
@@ -175,7 +176,6 @@ export default {
 	flex-direction: column;
 	max-width: 500px;
 	margin: auto;
-	margin-top: 20px;
 	transform: translateY(15px);
 	opacity: 0;
 	animation: 1s ease-out 0s 1 slideUpOnLoad;
@@ -184,7 +184,6 @@ export default {
 #show-more {
 	$height: 20px;
 	height: $height * 2;
-	margin-bottom: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -225,6 +224,7 @@ export default {
 	top: 30vh;
 	width: 100%;
 	padding: 0 10px;
+	margin-bottom: 20px;
 	&[disabled] {
 		opacity: 0.65;
 	}
@@ -233,34 +233,31 @@ export default {
 	display: flex;
 	align-items: center;
 	filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
-	> input {
+	> input,
+	> label {
 		transition: all 0.2s ease-in;
 		&:focus {
 			outline: none;
 		}
-		&[type='email'] {
-			height: 44px;
-			padding: 5px 35px 5px 20px;
-			font-size: 18px;
-			width: 100%;
-			border-width: 0px;
-			border-radius: 22px 0 0 22px;
-		}
-		&[type='submit'] {
-			background-position: calc(100% - 20px) center;
-			background-repeat: no-repeat;
-			opacity: 1;
-		}
-		&[type='submit']:not(:disabled) {
-			background-image: url('/wp-content/themes/nextcloud.com/assets/img/arrow_right.svg');
-		}
+	}
+	> input[type='email'] {
+		height: 44px;
+		padding: 5px 35px 5px 20px;
+		font-size: 18px;
+		width: 100%;
+		border-width: 0px;
+		border-radius: 22px 0 0 22px;
 	}
 	> .btn-primary {
 		padding: 10px 60px 10px 20px;
 		height: 44px;
 		margin-left: -25px;
-		&:hover {
-			background-position: calc(100% - 10px) center;
+		opacity: 1;
+		&::before {
+			right: 20px;
+		}
+		&:hover::before {
+			right: 10px;
 		}
 	}
 	&.icon-loading-small-dark,
