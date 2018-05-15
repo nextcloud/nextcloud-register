@@ -174,7 +174,6 @@ export default {
 #providers {
 	display: flex;
 	flex-direction: column;
-	max-width: 500px;
 	margin: auto;
 	transform: translateY(15px);
 	opacity: 0;

@@ -31,6 +31,7 @@
 
 		<!-- default template if all data loaded -->
 		<template v-else>
+			<div class="provider-logo" :style="{backgroundImage: 'url(' + provider.logo + ')'}" ></div>
 			<h3>{{provider.name}}</h3>
 			<p class="summary">{{provider.details}}</p>
 			<div class="location">
@@ -127,7 +128,7 @@ export default {
 	position: relative;
 	// override display block after animation
 	display: grid !important;
-	grid-template-columns: 1fr auto;
+	grid-template-columns: 75px 1fr auto;
 	grid-auto-flow: column;
 	grid-column-gap: 10px;
 	border-radius: 5px;
@@ -142,7 +143,14 @@ export default {
 	}
 	// loading svg
 	svg {
-		width: 460px;
+		width: 560px;
+	}
+	.provider-logo {
+		width: 75px;
+		height: 75px;
+		grid-row: span 3;
+		background: transparent no-repeat center/contain;
+		grid-column: 1;
 	}
 	h3 {
 		margin: 0;
@@ -154,6 +162,7 @@ export default {
 		line-height: 22px;
 		margin-bottom: 6px;
 		color: #555;
+		grid-column: 2;
 	}
 	p.summary {
 		font-weight: 100;
@@ -165,6 +174,7 @@ export default {
 		text-align: justify;
 		margin-top: 0;
 		color: #555;
+		grid-column: 2;
 	}
 	.location {
 		display: flex;
@@ -181,7 +191,7 @@ export default {
 			white-space: nowrap;
 		}
 		> span:not(.country) {
-			opacity: .5;
+			opacity: 0.5;
 		}
 		.country span {
 			margin-left: 5px;
@@ -191,6 +201,7 @@ export default {
 	.apps {
 		flex: 0 0 100%;
 		display: flex;
+		grid-column: 2;
 		span {
 			margin-right: 5px;
 			opacity: 0.5;
