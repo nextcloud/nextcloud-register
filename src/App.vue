@@ -266,16 +266,16 @@ export default {
 			left: calc(100% - 32px);
 			box-sizing: content-box;
 		}
-		> input {
-			&[type='email'] {
-				width: 0;
-				padding: 0;
-			}
-			&[type='submit'] {
-				margin-left: 0;
-				width: 100%;
-				background-image: none;
-				text-align: left;
+		> input[type='email'] {
+			width: 0;
+			padding: 0;
+		}
+		> .btn-primary {
+			margin-left: 0;
+			width: 100%;
+			text-align: left;
+			&::before {
+				opacity: 0;
 			}
 		}
 	}
