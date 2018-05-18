@@ -62,7 +62,7 @@ export default {
 			} else if (this.loading) {
 				return 'Creating your account';
 			}
-			return 'Sign Up';
+			return 'Register';
 		}
 	},
 	methods: {
@@ -88,7 +88,11 @@ export default {
 			});
 			// success! redirection...
 			axios
-				.post('/wp-json/register/account', { email, id, ocsapi: this.ocsapi })
+				.post('/wp-json/register/account', {
+					email,
+					id,
+					ocsapi: this.ocsapi
+				})
 				.then(response => {
 					this.created = true;
 					setTimeout(() => {
@@ -191,7 +195,7 @@ export default {
 	font-weight: 100;
 	cursor: pointer;
 	position: relative;
-	opacity: .5;
+	opacity: 0.5;
 	box-sizing: content-box;
 	color: #fff;
 	transition: all 0.2s ease-in;
@@ -207,7 +211,7 @@ export default {
 	}
 	&:hover,
 	&.opened {
-		opacity: .7;
+		opacity: 0.7;
 	}
 	&.opened {
 		&::before {
@@ -243,9 +247,12 @@ export default {
 		height: 44px;
 		padding: 5px 35px 5px 20px;
 		font-size: 18px;
-		width: 100%;
+		/* flex grow to fit the parent width */
+		width: 0;
+		flex: 1 0 auto;
 		border-width: 0px;
 		border-radius: 22px 0 0 22px;
+		background-color: #fff;
 	}
 	> .btn-primary {
 		padding: 10px 60px 10px 20px;
