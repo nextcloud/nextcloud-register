@@ -108,13 +108,13 @@ export default {
 	methods: {
 		selectProvider() {
 			if (this.selected === this.provider) {
-				window.emailprovider.focus();
+				document.getElementById('emailprovider').focus();
 				return;
 			}
 			this.selected = this.provider;
 			this.showAll = !this.showAll;
 			VueScrollTo.scrollTo('#register', 500, { offset: -50 });
-			window.emailprovider.focus();
+			document.getElementById('emailprovider').focus();
 		}
 	}
 };
@@ -149,6 +149,7 @@ export default {
 		width: 75px;
 		height: 75px;
 		grid-row: span 3;
+		-ms-grid-row-span: 3;
 		background: transparent no-repeat center/contain;
 		grid-column: 1;
 	}
@@ -163,6 +164,7 @@ export default {
 		margin-bottom: 6px;
 		color: #555;
 		grid-column: 2;
+		grid-row: 1;
 	}
 	p.summary {
 		font-weight: 100;
@@ -175,6 +177,7 @@ export default {
 		margin-top: 0;
 		color: #555;
 		grid-column: 2;
+		grid-row: 2;
 	}
 	.location {
 		display: flex;
@@ -183,6 +186,7 @@ export default {
 		grid-column: 3;
 		// h3 + p + apps
 		grid-row: span 3;
+		-ms-grid-row-span: 3;
 		span {
 			display: flex;
 			height: 25px;
@@ -202,6 +206,7 @@ export default {
 		flex: 0 0 100%;
 		display: flex;
 		grid-column: 2;
+		grid-row: 3;
 		span {
 			margin-right: 5px;
 			opacity: 0.5;
