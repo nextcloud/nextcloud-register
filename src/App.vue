@@ -1,21 +1,24 @@
 <template>
-	<div id="register" class="container revealOnLoad" :class="{'init': init}">
+	<div id="register" class="container revealOnLoad" :class="{ 'init': init }">
 		<form id="form" @submit.prevent="register" ref="register" :disabled="!init">
-			<div class="email" :class="{'icon-loading-small-dark': loading, error: error}">
-				<input type="email" ref="email" required value="" placeholder="Your email address" id="emailprovider" :disabled="!init" />
-				<label for="submit-registration" class="btn btn-primary" :disabled="!init||loading">{{signUp}}</label>
-				<input type="submit" class="hidden" id="submit-registration" :value="signUp" :disabled="!init||loading" />
+			<div class="email" :class="{ 'icon-loading-small-dark': loading, error: error }">
+				<input type="email" ref="email" required value="" :placeholder="l10n.email" id="emailprovider" :disabled="!init" />
+				<label for="submit-registration" class="btn btn-primary" :disabled="!init || loading">{{signUp}}</label>
+				<input type="submit" class="hidden" id="submit-registration" :value="signUp" :disabled="!init || loading" />
 			</div>
-			<div class="newsletter"></div>
+			<div class="newsletter">
+				<input type="checkbox" ref="subscribe" name="subscribe" id="subscribe" />
+				<label for="subscribe">{{l10n.subscribe}}</label>
+			</div>
 		</form>
 		<provider :provider="selected" :show="true" :init="init" class="selected-provider" />
 		<div id="show-more" @click="toggleShowAll"
 			 :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}">
 			<span v-if="init">
-				 {{showAll ? 'close' : 'change provider'}}
+				 {{ showAll ? l10n.close : l10n.change }}
 			</span>
 		</div>
-		<div id="providers" v-if="showAll===true">
+		<div id="providers" v-if="showAll === true">
 			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" />
 		</div>
 	</div>
@@ -25,6 +28,7 @@
 import provider from './Components/Provider';
 import VueScrollTo from 'vue-scrollto';
 import axios from 'axios';
+import Vue from 'vue';
 
 export default {
 	name: 'app',
@@ -35,14 +39,24 @@ export default {
 		return {
 			// Default nextcloud location
 			ll: [48.7871141, 9.1547062],
-			selected: false, // current selected provider
-			showAll: false, // show all providers toggle
-			loading: false, // submit loading
-			init: false, // page init loading
-			providers: [], // empty providers list
-			created: false, // is the account creation successful
-			error: false, // is the request successful
-			ocsapi: false // is the request successful
+			selected: false,	// current selected provider
+			showAll: false,		// show all providers toggle
+			loading: false,		// submit loading
+			init: false,		// page init loading
+			providers: [],		// empty providers list
+			created: false,		// is the account creation successful
+			error: false,		// is the request successful
+			ocsapi: false,		// is the request made by an api
+			l10n: {
+				subscribe: 'Subscribe to our newsletter',
+				email: 'Your email address',
+				success: 'Success! Redirecting you to the provider',
+				error: 'Error:',
+				processing: 'Creating your account',
+				register: 'Register',
+				change: 'change provider',
+				close: 'close',
+			}
 		};
 	},
 	beforeMount() {
@@ -52,17 +66,18 @@ export default {
 			this.ll = [location.latitude, location.longitude];
 		}
 		this.getProviders();
+		Vue.set(this, 'l10n', Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n)));
 	},
 	computed: {
 		signUp() {
 			if (this.created) {
-				return 'Success! Redirecting you to the provider';
+				return this.l10n.success;
 			} else if (this.error !== false) {
-				return 'Error: ' + this.error;
+				return this.l10n.error + ' ' + this.error;
 			} else if (this.loading) {
-				return 'Creating your account';
+				return this.l10n.processing;
 			}
-			return 'Register';
+			return this.l10n.register;
 		}
 	},
 	methods: {
@@ -86,12 +101,14 @@ export default {
 			let id = this.providers.findIndex(provider => {
 				return provider === this.selected;
 			});
+			let subscribe = this.$refs.subscribe.checked;
 			// success! redirection...
 			axios
 				.post('/wp-json/register/account', {
 					email,
 					id,
-					ocsapi: this.ocsapi
+					ocsapi: this.ocsapi,
+					subscribe
 				})
 				.then(response => {
 					this.created = true;
@@ -286,6 +303,34 @@ export default {
 		}
 	}
 }
+
+.newsletter {
+	user-select: none;
+	position: relative;
+	input {
+		display: none;
+		&:checked + label {
+			&, &::before {
+				opacity: .7;
+			}
+		}
+	}
+	label {
+		color: #fff;
+		opacity: .5;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+		&::before {
+			content: '✓';
+			display: block;
+			font-weight: 600;
+			width: 20px; // align w/ email input
+			opacity: 0;
+		}
+	}
+}
+
 @keyframes slideUpOnLoad {
 	0% {
 		transform: translateY(15px);
