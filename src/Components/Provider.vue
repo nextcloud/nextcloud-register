@@ -61,7 +61,7 @@ import { ContentLoader } from 'vue-content-loader';
 
 export default {
 	name: 'provider',
-	props: ['provider', 'show', 'init'],
+	props: ['provider', 'show', 'init', 'l10n'],
 	components: {
 		ContentLoader
 	},
@@ -78,7 +78,7 @@ export default {
 			} else if (this.provider.score <= 1000) {
 				return this.provider.score + 'km';
 			} else {
-				return 'Far far away';
+				return this.l10n.far;
 			}
 		},
 		selected: {
@@ -127,6 +127,7 @@ export default {
 	padding: 10px;
 	position: relative;
 	// override display block after animation
+	display: -ms-grid !important;
 	display: grid !important;
 	grid-template-columns: 75px 1fr auto;
 	grid-auto-flow: column;
@@ -147,11 +148,12 @@ export default {
 	}
 	.provider-logo {
 		width: 75px;
-		height: 75px;
+		height: 95px;
 		grid-row: span 3;
 		-ms-grid-row-span: 3;
 		background: transparent no-repeat center/contain;
 		grid-column: 1;
+		-ms-grid-column: 1;
 	}
 	h3 {
 		margin: 0;
@@ -165,25 +167,34 @@ export default {
 		color: #555;
 		grid-column: 2;
 		grid-row: 1;
+		-ms-grid-column: 2;
+		-ms-grid-row: 1;
 	}
 	p.summary {
 		font-weight: 100;
 		opacity: 0.9;
 		line-height: 1.2em;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		text-align: justify;
+		max-height: 2.4em; /* two lines */
 		margin-top: 0;
 		color: #555;
 		grid-column: 2;
 		grid-row: 2;
+		-ms-grid-column: 2;
+		-ms-grid-row: 2;
+		/* line clamping now supported by all
+		   we also have a js fallback */
+		overflow: hidden;
+		display: -webkit-box;
+		text-overflow: ellipsis;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
 	}
 	.location {
 		display: flex;
 		flex-direction: column;
 		text-align: right;
 		grid-column: 3;
+		-ms-grid-column: 3;
 		// h3 + p + apps
 		grid-row: span 3;
 		-ms-grid-row-span: 3;
@@ -207,6 +218,8 @@ export default {
 		display: flex;
 		grid-column: 2;
 		grid-row: 3;
+		-ms-grid-column: 2;
+		-ms-grid-row: 3;
 		span {
 			margin-right: 5px;
 			opacity: 0.5;

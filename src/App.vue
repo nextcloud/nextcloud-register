@@ -19,7 +19,7 @@
 			</span>
 		</div>
 		<div id="providers" v-if="showAll === true">
-			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" />
+			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" :l10n="l10n" />
 		</div>
 	</div>
 </template>
@@ -56,6 +56,7 @@ export default {
 				register: 'Register',
 				change: 'change provider',
 				close: 'close',
+				far: 'Far far away'
 			}
 		};
 	},
@@ -307,11 +308,13 @@ export default {
 .newsletter {
 	user-select: none;
 	position: relative;
+	margin-top: 4px;
 	input {
 		display: none;
 		&:checked + label {
 			&, &::before {
 				opacity: .7;
+				content: '✓'
 			}
 		}
 	}
@@ -321,12 +324,19 @@ export default {
 		display: flex;
 		align-items: center;
 		cursor: pointer;
+		height: 20px;
 		&::before {
-			content: '✓';
+			content: ' ';
 			display: block;
 			font-weight: 600;
-			width: 20px; // align w/ email input
-			opacity: 0;
+			width: 15px; // align w/ email input
+			height: 15px;
+			line-height: 14px;
+			font-size: 14px;
+			text-align: center;
+			border: 1px solid rgba(255, 255, 255, .7);
+			border-radius: 3px;
+			margin-right: 5px;
 		}
 	}
 }
