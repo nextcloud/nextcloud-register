@@ -34,7 +34,7 @@
 			<div class="provider-logo" :style="{backgroundImage: 'url(' + provider.logo + ')'}" ></div>
 			<h3>{{provider.name}}</h3>
 			<p class="summary">{{provider.details}}</p>
-			<div class="location">
+			<div class="details">
 				<span class="country">
 					<span v-for="(country, key) in provider.flags" :key="key"
 						:title="country"
@@ -42,6 +42,7 @@
 				</span>
 				<span class="city">{{provider.city}}</span>
 				<span class="distance">{{distance}}</span>
+				<span class="freeplan">{{provider.freeplan}}</span>
 			</div>
 			<div class="apps">
 				<!-- core is un-removable -->
@@ -189,7 +190,7 @@ export default {
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 	}
-	.location {
+	.details {
 		display: flex;
 		flex-direction: column;
 		text-align: right;
