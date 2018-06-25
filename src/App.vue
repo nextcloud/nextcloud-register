@@ -245,7 +245,6 @@ export default {
 	top: 30vh;
 	width: 100%;
 	padding: 0 10px;
-	margin-bottom: 20px;
 	&[disabled] {
 		opacity: 0.65;
 	}
@@ -308,7 +307,6 @@ export default {
 .newsletter {
 	user-select: none;
 	position: relative;
-	margin-top: 4px;
 	input {
 		display: none;
 		&:checked + label {
@@ -324,7 +322,8 @@ export default {
 		display: flex;
 		align-items: center;
 		cursor: pointer;
-		height: 20px;
+		padding: 8px 0;
+		justify-content: center;		
 		&::before {
 			content: ' ';
 			display: block;
