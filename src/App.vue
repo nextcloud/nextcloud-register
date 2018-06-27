@@ -11,7 +11,7 @@
 				<label for="subscribe">{{l10n.subscribe}}</label>
 			</div>
 		</form>
-		<provider :provider="selected" :show="true" :init="init" class="selected-provider" />
+		<provider :provider="selected" :show="true" :init="init" class="selected-provider" :l10n="l10n" />
 		<div id="show-more" @click="toggleShowAll"
 			 :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}">
 			<span v-if="init">
@@ -61,13 +61,19 @@ export default {
 		};
 	},
 	beforeMount() {
-		let location = JSON.parse(window.register.dataset.ll);
+		// is this an ocs api request?
 		this.ocsapi = window.register.dataset.ocsapi === '1';
+
+		// set location
+		let location = JSON.parse(window.register.dataset.ll);
 		if (location.latitude && location.longitude) {
 			this.ll = [location.latitude, location.longitude];
 		}
+		// retrieve providers list
 		this.getProviders();
-		Vue.set(this, 'l10n', Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n)));
+
+		// merge server translations into local ones
+		this.l10n = Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n));
 	},
 	computed: {
 		signUp() {
@@ -83,9 +89,13 @@ export default {
 	},
 	methods: {
 		getProviders() {
-			axios.get('/wp-json/register/providers').then(response => {
+			axios.get('/wp-json/register/providers')
+			.then(response => {
 				this.providers = response.data;
 				this.scoreProvider(this.ll[0], this.ll[1]);
+			})
+			.catch(response => {
+				this.error = 'Error while retrieving the providers list.'
 			});
 		},
 		// submit
