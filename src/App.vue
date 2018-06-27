@@ -56,7 +56,8 @@ export default {
 				register: 'Register',
 				change: 'change provider',
 				close: 'close',
-				far: 'Far far away'
+				far: 'Far far away',
+				geterror: 'Error while retrieving the providers list.'
 			}
 		};
 	},
@@ -95,7 +96,7 @@ export default {
 				this.scoreProvider(this.ll[0], this.ll[1]);
 			})
 			.catch(response => {
-				this.error = 'Error while retrieving the providers list.'
+				this.error = ''
 			});
 		},
 		// submit
