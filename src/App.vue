@@ -96,7 +96,7 @@ export default {
 				this.scoreProvider(this.ll[0], this.ll[1]);
 			})
 			.catch(response => {
-				this.error = ''
+				this.error = this.l10n.geterror;
 			});
 		},
 		// submit
