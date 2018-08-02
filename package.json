@@ -1,7 +1,7 @@
 {
 	"name": "nextcloud-register",
 	"description": "Register a nextcloud account",
-	"version": "1.1.0",
+	"version": "2.0.0",
 	"author": "John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>",
 	"license": "AGPL-3.0",
 	"private": true,
@@ -13,6 +13,7 @@
 	"dependencies": {
 		"axios": "^0.18.0",
 		"babel-polyfill": "^6.26.0",
+		"v-tooltip": "^2.0.0-rc.33",
 		"vue": "^2.5.16",
 		"vue-content-loader": "^0.2.1",
 		"vue-scrollto": "^2.11.0"
@@ -22,19 +23,19 @@
 		"not ie <= 11"
 	],
 	"devDependencies": {
-		"autoprefixer": "^8.6.3",
+		"autoprefixer": "^8.6.5",
 		"babel-core": "^6.26.3",
-		"babel-loader": "^7.1.4",
+		"babel-loader": "^7.1.5",
 		"babel-preset-env": "^1.7.0",
 		"css-loader": "^0.28.11",
 		"file-loader": "^1.1.11",
-		"node-sass": "^4.9.0",
-		"postcss-loader": "^2.1.5",
-		"sass-loader": "^7.0.3",
-		"vue-loader": "^15.2.4",
+		"node-sass": "^4.9.2",
+		"postcss-loader": "^2.1.6",
+		"sass-loader": "^7.1.0",
+		"vue-loader": "^15.2.6",
 		"vue-template-compiler": "^2.5.16",
-		"webpack": "^4.12.0",
-		"webpack-cli": "^3.0.4",
+		"webpack": "^4.16.3",
+		"webpack-cli": "^3.1.0",
 		"webpack-merge": "^4.1.2"
 	}
 }

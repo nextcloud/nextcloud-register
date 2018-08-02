@@ -6,12 +6,24 @@
 				<label for="submit-registration" class="btn btn-primary" :disabled="!init || loading">{{signUp}}</label>
 				<input type="submit" class="hidden" id="submit-registration" :value="signUp" :disabled="!init || loading" />
 			</div>
-			<div class="newsletter">
-				<input type="checkbox" ref="subscribe" name="subscribe" id="subscribe" />
-				<label for="subscribe">{{l10n.subscribe}}</label>
+			<div class="checkboxes">
+				<span>
+					<input type="checkbox" ref="tos" name="tos" id="tos" v-model="tosAgreed" required />
+					<label for="tos" class="tos">
+						{{ l10n.tosagree.split('%tos%')[0].replace(/ /g, '&nbsp;') }}
+						<a :href="selected.tos" target="_blank">{{l10n.tos}}</a>
+						{{ l10n.tosagree.split('%tos%')[1].replace(/ /g, '&nbsp;') }}
+					</label>
+				</span>
+				<span>
+					<input type="checkbox" ref="subscribe" name="subscribe" id="subscribe" />
+					<label for="subscribe">
+						{{l10n.subscribe}}
+					</label>
+				</span>
 			</div>
 		</form>
-		<provider :provider="selected" :show="true" :init="init" class="selected-provider" :l10n="l10n" />
+		<provider :provider="selected" :show="true" :init="init" class="selected-provider" :l10n="l10n" :officialApps="officialApps" />
 		<div id="show-more" @click="toggleShowAll"
 			 :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}">
 			<span v-if="init">
@@ -19,7 +31,7 @@
 			</span>
 		</div>
 		<div id="providers" v-if="showAll === true">
-			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" :l10n="l10n" />
+			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" :l10n="l10n" :officialApps="officialApps" />
 		</div>
 	</div>
 </template>
@@ -47,6 +59,8 @@ export default {
 			created: false,		// is the account creation successful
 			error: false,		// is the request successful
 			ocsapi: false,		// is the request made by an api
+			officialApps: [],
+			tosAgreed: false,	// agreed to the tos ?
 			l10n: {
 				subscribe: 'Subscribe to our newsletter',
 				email: 'Your email address',
@@ -57,13 +71,18 @@ export default {
 				change: 'change provider',
 				close: 'close',
 				far: 'Far far away',
-				geterror: 'Error while retrieving the providers list.'
+				geterror: 'Error while retrieving the providers list.',
+				tos: 'Terms of service',
+				tosagree: 'I agree to the %tos%'
 			}
 		};
 	},
 	beforeMount() {
 		// is this an ocs api request?
 		this.ocsapi = window.register.dataset.ocsapi === '1';
+
+		// init officialApps
+		this.officialApps = JSON.parse(window.register.dataset.officialapps);
 
 		// set location
 		let location = JSON.parse(window.register.dataset.ll);
@@ -107,18 +126,24 @@ export default {
 				this.error = false;
 				return;
 			}
+			if (!this.tosAgreed) {
+				this.error = this.l10n.error + ' ' + tos;
+				return;
+			}
 			this.toggleLoading();
 			this.showAll = false;
 			let email = this.$refs.email.value;
 			let id = this.providers.findIndex(provider => {
 				return provider === this.selected;
 			});
+			let location = this.providers[id].selected;
 			let subscribe = this.$refs.subscribe.checked;
 			// success! redirection...
 			axios
 				.post('/wp-json/register/account', {
 					email,
 					id,
+					location,
 					ocsapi: this.ocsapi,
 					subscribe
 				})
@@ -177,7 +202,7 @@ export default {
 			this.providers.forEach((provider, index) => {
 				let mindifprov = 99999;
 				// let's test all of the locations and use the closest one as default for this provider
-				provider.ll.forEach(({ lat, long, city }) => {
+				provider.locations.forEach(({ lat, long, city }, index) => {
 					let dif = this.pythagorasEquirectangular(
 						latitude,
 						longitude,
@@ -189,6 +214,7 @@ export default {
 						mindifprov = dif;
 						this.$set(provider, 'score', Math.round(dif));
 						this.$set(provider, 'city', city);
+						this.$set(provider, 'selected', index);
 					}
 				});
 				// if score of this provider is better than the previous one, select it
@@ -256,6 +282,9 @@ export default {
 	top: 30vh;
 	width: 100%;
 	padding: 0 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	&[disabled] {
 		opacity: 0.65;
 	}
@@ -315,11 +344,20 @@ export default {
 	}
 }
 
-.newsletter {
+.checkboxes {
 	user-select: none;
 	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin: 0 auto;
+	span {
+		position: relative;
+	}
 	input {
-		display: none;
+		position: absolute;
+		opacity: 0;
+		top: 14px;
 		&:checked + label {
 			&, &::before {
 				opacity: .7;
@@ -328,7 +366,9 @@ export default {
 		}
 	}
 	label {
-		color: #fff;
+		&, a {
+			color: #fff;
+		}
 		opacity: .5;
 		display: flex;
 		align-items: center;
@@ -348,6 +388,11 @@ export default {
 			border-radius: 3px;
 			margin-right: 5px;
 		}
+	}
+
+	label.tos {
+		padding-bottom: 0;
+		opacity: .7;
 	}
 }
 

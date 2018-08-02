@@ -45,12 +45,9 @@
 				<span class="freeplan">{{provider.freeplan}}</span>
 			</div>
 			<div class="apps">
-				<!-- core is un-removable -->
-				<span title="Files" height="16" width="16"
-					class="app-core"></span>
-				<span v-for="(app, key) in provider.apps" :key="key"
-					:title="app" height="16" width="16" v-if="officialApps.indexOf(app)>=0"
-					:class="'app-'+app"></span>
+				<span v-for="(app, key) in apps" :key="key"
+					 height="16" width="16" v-if="officialApps.hasOwnProperty(app)"
+					 :class="'app-'+app" v-tooltip.auto="officialApps[app]"></span>
 			</div>
 		</template>
 
@@ -58,20 +55,30 @@
 </template>
 <script>
 import VueScrollTo from 'vue-scrollto';
+import VTooltip from 'v-tooltip';
 import { ContentLoader } from 'vue-content-loader';
+import Vue from 'vue';
+
+Vue.use(VTooltip);
+
+VTooltip.options.autoHide = false;
 
 export default {
 	name: 'provider',
-	props: ['provider', 'show', 'init', 'l10n'],
+	props: ['provider', 'show', 'init', 'l10n', 'officialApps'],
 	components: {
 		ContentLoader
 	},
-	data() {
-		return {
-			officialApps: ['contacts', 'calendar', 'spreed', 'mail', 'tasks']
-		};
-	},
 	computed: {
+		apps() {
+			return this.provider.apps.slice(0).sort(function (a, b) {
+				// sort core in front
+				if (a === 'core') {
+					return -1
+				}
+				return a.localeCompare(b);
+			})
+		},
 		distance() {
 			// Don't display distance bigger than 1000km
 			if (this.provider.score <= 100) {
@@ -222,9 +229,45 @@ export default {
 		-ms-grid-column: 2;
 		-ms-grid-row: 3;
 		span {
-			margin-right: 5px;
+			height: 25px;
+			width: 25px;
+			background-position: center center;
 			opacity: 0.5;
 		}
+	}
+}
+</style>
+<style lang="scss">
+.vue-tooltip-theme {
+	background: #fff;
+	filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+	border: solid 1px #f1f1f1;
+	border-radius: 4px;
+	transform-origin: left top;
+	will-change: transform;
+	position: absolute;
+	z-index: 5;
+	top: 100%;
+	font-size: 15px;
+	padding: 5px;
+	user-select: none;
+	&::before {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		right: auto;
+		transform: translateX(-50%);
+		height: 0;
+		width: 0;
+		border: 8px solid transparent;
+		border-top-color: #f1f1f1;
+	}
+	&[x-placement='bottom']::before {
+		bottom: 100%;
+		top: auto;
+		border-top-color: transparent;
+		border-bottom-color: #f1f1f1;
 	}
 }
 </style>
