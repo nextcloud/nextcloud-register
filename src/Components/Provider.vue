@@ -47,7 +47,7 @@
 			<div class="apps">
 				<span v-for="(app, key) in apps" :key="key"
 					 height="16" width="16" v-if="officialApps.hasOwnProperty(app)"
-					 :class="'app-'+app" v-tooltip.auto="officialApps[app]"></span>
+					 :class="'app-'+app" v-tooltip.bottom="officialApps[app]"></span>
 			</div>
 		</template>
 
@@ -240,7 +240,7 @@ export default {
 <style lang="scss">
 .vue-tooltip-theme {
 	background: #fff;
-	filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+	filter: drop-shadow(0 1px 4px rgba(0,0,0,0.4));
 	border: solid 1px #f1f1f1;
 	border-radius: 4px;
 	transform-origin: left top;
