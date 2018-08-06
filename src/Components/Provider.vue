@@ -223,6 +223,7 @@ export default {
 	}
 	.apps {
 		flex: 0 0 100%;
+		flex-wrap: wrap;
 		display: flex;
 		grid-column: 2;
 		grid-row: 3;
@@ -240,7 +241,7 @@ export default {
 <style lang="scss">
 .vue-tooltip-theme {
 	background: #fff;
-	filter: drop-shadow(0 1px 4px rgba(0,0,0,0.4));
+	filter: drop-shadow(0 1px 4px rgba(0,0,0,.6));
 	border: solid 1px #f1f1f1;
 	border-radius: 4px;
 	transform-origin: left top;
