@@ -171,7 +171,7 @@ export default {
 		text-overflow: ellipsis;
 		font-size: 22px;
 		line-height: 22px;
-		margin-bottom: 6px;
+		padding-bottom: 6px;
 		color: #555;
 		grid-column: 2;
 		grid-row: 1;
