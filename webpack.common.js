@@ -6,7 +6,7 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, '../assets/js/pages/'),
 		publicPath: '../assets/js/pages/',
-        filename: 'register.js'
+        filename: 'signup.js'
 	},
 	module: {
 		rules: [

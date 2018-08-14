@@ -67,7 +67,7 @@ export default {
 				success: 'Success! Redirecting you to the provider',
 				error: 'Error:',
 				processing: 'Creating your account',
-				register: 'Register',
+				register: 'Sign up',
 				change: 'change provider',
 				close: 'close',
 				far: 'Far far away',
@@ -109,7 +109,7 @@ export default {
 	},
 	methods: {
 		getProviders() {
-			axios.get('/wp-json/register/providers')
+			axios.get('/wp-json/signup/providers')
 			.then(response => {
 				this.providers = response.data;
 				this.scoreProvider(this.ll[0], this.ll[1]);
@@ -140,7 +140,7 @@ export default {
 			let subscribe = this.$refs.subscribe.checked;
 			// success! redirection...
 			axios
-				.post('/wp-json/register/account', {
+				.post('/wp-json/signup/account', {
 					email,
 					id,
 					location,
