@@ -138,6 +138,7 @@ export default {
 	display: -ms-grid !important;
 	display: grid !important;
 	grid-template-columns: 75px 1fr auto;
+	grid-template-rows: 25px 50px 25px;
 	grid-auto-flow: column;
 	grid-column-gap: 10px;
 	border-radius: 5px;
@@ -156,7 +157,7 @@ export default {
 	}
 	.provider-logo {
 		width: 75px;
-		height: 95px;
+		height: 100%;
 		grid-row: span 3;
 		-ms-grid-row-span: 3;
 		background: transparent no-repeat center/contain;
@@ -181,8 +182,8 @@ export default {
 	p.summary {
 		font-weight: 100;
 		opacity: 0.9;
-		line-height: 1.2em;
-		max-height: 2.4em; /* two lines */
+		line-height: 25px;
+		max-height: 50px; /* two lines */
 		margin-top: 0;
 		color: #555;
 		grid-column: 2;
@@ -207,14 +208,12 @@ export default {
 		grid-row: span 3;
 		-ms-grid-row-span: 3;
 		span {
+			font-weight: 100;
 			display: flex;
 			height: 25px;
 			align-items: center;
 			justify-content: flex-end;
 			white-space: nowrap;
-		}
-		> span:not(.country) {
-			opacity: 0.5;
 		}
 		.country span {
 			margin-left: 5px;
@@ -229,6 +228,7 @@ export default {
 		grid-row: 3;
 		-ms-grid-column: 2;
 		-ms-grid-row: 3;
+		margin-left: -5px; // align the first icon to the text
 		span {
 			height: 25px;
 			width: 25px;
