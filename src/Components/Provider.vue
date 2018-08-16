@@ -181,7 +181,7 @@ export default {
 	}
 	p.summary {
 		font-weight: 100;
-		opacity: 0.9;
+		opacity: .9;
 		line-height: 25px;
 		max-height: 50px; /* two lines */
 		margin: 0;
@@ -207,6 +207,7 @@ export default {
 		// h3 + p + apps
 		grid-row: span 3;
 		-ms-grid-row-span: 3;
+		opacity: .9;
 		span {
 			font-weight: 100;
 			display: flex;
@@ -237,7 +238,7 @@ export default {
 			span {
 				width: 20px;
 				filter: invert(100%);
-				opacity: .8;
+				opacity: 1;
 			}
 		}
 		span {
