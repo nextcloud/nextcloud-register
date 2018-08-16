@@ -45,8 +45,12 @@
 				<span class="freeplan">{{provider.freeplan}}</span>
 			</div>
 			<div class="apps">
+				<div class="app-group-core" v-tooltip.bottom="officialApps['core']">
+					<span v-for="(app, key) in coreApps" :key="key"
+						:class="'app-'+app"></span>
+				</div>
 				<span v-for="(app, key) in apps" :key="key"
-					 height="16" width="16" v-if="officialApps.hasOwnProperty(app)"
+					 v-if="officialApps.hasOwnProperty(app)"
 					 :class="'app-'+app" v-tooltip.bottom="officialApps[app]"></span>
 			</div>
 		</template>
@@ -65,26 +69,21 @@ VTooltip.options.autoHide = false;
 
 export default {
 	name: 'provider',
-	props: ['provider', 'show', 'init', 'l10n', 'officialApps'],
+	props: ['provider', 'show', 'init', 'l10n', 'officialApps', 'coreApps'],
 	components: {
 		ContentLoader
 	},
 	computed: {
 		apps() {
 			return this.provider.apps.slice(0).sort(function (a, b) {
-				// sort core in front
-				if (a === 'core') {
-					return -1
-				}
 				return a.localeCompare(b);
 			})
 		},
 		distance() {
 			// Don't display distance bigger than 1000km
-			if (this.provider.score <= 100) {
-				return '< 100km';
-			} else if (this.provider.score <= 1000) {
-				return this.provider.score + 'km';
+			if (this.provider.score <= 1000) {
+				// rounding to the hundred
+				return '< ' + Math.round(this.provider.score / 100) * 100 + 'km';
 			} else {
 				return this.l10n.far;
 			}
@@ -137,8 +136,10 @@ export default {
 	// override display block after animation
 	display: -ms-grid !important;
 	display: grid !important;
-	grid-template-columns: 75px 1fr auto;
-	grid-template-rows: 25px 50px 25px;
+	grid-template-columns: 75px 1fr;
+	-ms-grid-columns: 75px 1fr;
+	grid-template-rows: 25px 50px;
+	-ms-grid-rows: 25px 50px;
 	grid-auto-flow: column;
 	grid-column-gap: 10px;
 	border-radius: 5px;
@@ -172,7 +173,6 @@ export default {
 		text-overflow: ellipsis;
 		font-size: 22px;
 		line-height: 22px;
-		padding-bottom: 6px;
 		color: #555;
 		grid-column: 2;
 		grid-row: 1;
@@ -184,7 +184,7 @@ export default {
 		opacity: 0.9;
 		line-height: 25px;
 		max-height: 50px; /* two lines */
-		margin-top: 0;
+		margin: 0;
 		color: #555;
 		grid-column: 2;
 		grid-row: 2;
@@ -229,6 +229,17 @@ export default {
 		-ms-grid-column: 2;
 		-ms-grid-row: 3;
 		margin-left: -5px; // align the first icon to the text
+		.app-group-core {
+			display: flex;
+			background-color: #0082c9;
+			border-radius: 3px;
+			padding: 0 3px;
+			span {
+				width: 20px;
+				filter: invert(100%);
+				opacity: .8;
+			}
+		}
 		span {
 			height: 25px;
 			width: 25px;

@@ -23,7 +23,7 @@
 				</span>
 			</div>
 		</form>
-		<provider :provider="selected" :show="true" :init="init" class="selected-provider" :l10n="l10n" :officialApps="officialApps" />
+		<provider :provider="selected" :show="true" :init="init" class="selected-provider" :l10n="l10n" :officialApps="officialApps" :coreApps="coreApps" />
 		<div id="show-more" @click="toggleShowAll"
 			 :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}">
 			<span v-if="init">
@@ -31,7 +31,7 @@
 			</span>
 		</div>
 		<div id="providers" v-if="showAll === true">
-			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" :l10n="l10n" :officialApps="officialApps" />
+			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" :l10n="l10n" :officialApps="officialApps" :coreApps="coreApps" />
 		</div>
 	</div>
 </template>
@@ -60,6 +60,7 @@ export default {
 			error: false,		// is the request successful
 			ocsapi: false,		// is the request made by an api
 			officialApps: [],
+			coreApps: [],
 			tosAgreed: false,	// agreed to the tos ?
 			l10n: {
 				subscribe: 'Subscribe to our newsletter',
@@ -83,6 +84,8 @@ export default {
 
 		// init officialApps
 		this.officialApps = JSON.parse(window.register.dataset.officialapps);
+
+		this.coreApps = JSON.parse(window.register.dataset.coreapps);
 
 		// set location
 		let location = JSON.parse(window.register.dataset.ll);
