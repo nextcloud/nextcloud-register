@@ -45,13 +45,11 @@
 				<span class="freeplan">{{provider.freeplan}}</span>
 			</div>
 			<div class="apps">
-				<div class="app-group-core" v-tooltip.bottom="officialApps['core']">
-					<span v-for="(app, key) in coreApps" :key="key"
-						:class="'app-'+app"></span>
-				</div>
+				<span v-for="(app, key) in coreApps" :key="key" class="core"
+					:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]" v-tooltip.bottom="officialApps[app]"></span>
 				<span v-for="(app, key) in apps" :key="key"
-					 v-if="officialApps.hasOwnProperty(app)"
-					 :class="'app-'+app" v-tooltip.bottom="officialApps[app]"></span>
+					v-if="officialApps.hasOwnProperty(app)"
+					:class="'app-'+app" v-tooltip.bottom="officialApps[app]"></span>
 			</div>
 		</template>
 
@@ -229,23 +227,42 @@ export default {
 		grid-row: 3;
 		-ms-grid-column: 2;
 		-ms-grid-row: 3;
-		margin-left: -5px; // align the first icon to the text
-		.app-group-core {
-			display: flex;
-			background-color: #0082c9;
-			border-radius: 3px;
-			padding: 0 3px;
-			span {
-				width: 20px;
-				filter: invert(100%);
-				opacity: 1;
-			}
-		}
+		margin-left: -3px; // align the first icon to the text
 		span {
-			height: 25px;
-			width: 25px;
 			background-position: center center;
 			opacity: 0.5;
+			height: 25px;
+			width: 25px;
+			max-width: 25px;
+			min-width: 18px;
+			flex: 1 1 18px;
+			&.core {
+				opacity: 1;
+				background-color: #0082c9;
+				&.first {
+					display: flex;
+					margin-left: 3px;
+					&::before {
+						content: '';
+						border-radius: 3px 0 0 3px;
+						width: 3px;
+						margin-left: -3px;
+						background-color: inherit;
+					}
+				}
+				&.last {
+					display: flex;
+					margin-right: 3px;
+					&::after {
+						content: '';
+						border-radius: 0 3px 3px 0;
+						width: 3px;
+						margin-left: 100%;
+						margin-right: -3px;
+						background-color: inherit;
+					}
+				}
+			}
 		}
 	}
 }
