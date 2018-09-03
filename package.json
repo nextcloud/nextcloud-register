@@ -14,7 +14,7 @@
 		"axios": "^0.18.0",
 		"babel-polyfill": "^6.26.0",
 		"v-tooltip": "^2.0.0-rc.33",
-		"vue": "^2.5.16",
+		"vue": "^2.5.17",
 		"vue-content-loader": "^0.2.1",
 		"vue-scrollto": "^2.11.0"
 	},
