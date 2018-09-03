@@ -1,0 +1,33 @@
+[
+    {
+        "name": "Provider",
+        "logo": "https://provider.com/image/provider.png",
+        "details": "This is the best provider.",
+        "tos": "https://provider.com/tos.html",
+        "locations": [
+            {
+                "lat": 48.7871141,
+                "long": 9.1547062,
+                "city": "Stuttgart",
+                "url": "https://register.provider.com",
+                "key": "c59cf7fa39d4ed2cdaf1997cc16f902e"
+            }
+        ],
+        "flags": [
+            "de"
+        ],
+        "freeplan": "5GB",
+        "apps": [
+            "bookmarks",
+            "news",
+            "twofactor_totp",
+            "gallery",
+            "collabora",
+            "deck",
+            "fulltextsearch",
+            "mindmaps",
+            "passman",
+            "drawio"
+        ]
+    }
+]
