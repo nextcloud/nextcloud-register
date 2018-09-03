@@ -1,18 +1,26 @@
 # nextcloud-register
 
-> Register nextcloud account
+> This is the app that manages the single signup process on [nextcloud.com](https://nextcloud.com)
+1. clone and setup https://github.com/nextcloud/nextcloud.com
+2. create a preferred.json file and setup the config.php with the correct data
+3. on the nextcloud theme, clone this repository
+4. build
 
 ## Build Setup
 
 ``` bash
-# install dependencies
-npm install
+# fully build this app
+make
 
-# serve with hot reload at localhost:8080
-npm run dev
+# install dependencies and setup env
+make dev-setup
 
-# build for production with minification
-npm run build
+# build for production
+make build-js-production
+
+# build for dev
+make build-js
+
+# build and watch changes
+make watch-js
 ```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
