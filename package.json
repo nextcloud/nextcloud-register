@@ -28,7 +28,6 @@
 		"autoprefixer": "^9.1.5",
 		"babel-loader": "^8.0.2",
 		"css-loader": "^0.28.11",
-		"file-loader": "^2.0.0",
 		"node-sass": "^4.9.3",
 		"postcss-loader": "^3.0.0",
 		"sass-loader": "^7.1.0",
