@@ -156,7 +156,6 @@ export default {
 	}
 	.provider-logo {
 		width: 75px;
-		height: 100%;
 		grid-row: span 3;
 		-ms-grid-row-span: 3;
 		background: transparent no-repeat center/contain;
