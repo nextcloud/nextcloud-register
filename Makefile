@@ -1,5 +1,6 @@
-all: dev-setup build-js-production
+all: dev-setup lint build-js-production test
 
+# Dev env management
 dev-setup: clean clean-dev npm-init
 
 npm-init:
@@ -8,6 +9,7 @@ npm-init:
 npm-update:
 	npm update
 
+# Building
 build-js:
 	npm run dev
 
@@ -17,6 +19,14 @@ build-js-production:
 watch-js:
 	npm run watch
 
+# Linting
+lint:
+	npm run lint
+
+lint-fix:
+	npm run lint:fix
+
+# Cleaning
 clean:
 	rm -f ../assets/js/pages/signup.js
 	rm -f ../assets/js/pages/signup.js.map

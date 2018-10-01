@@ -1,49 +1,58 @@
 <template>
-	<div id="register" class="container revealOnLoad" :class="{ 'init': init }">
-		<form id="form" @submit.prevent="register" ref="register" :disabled="!init">
-			<div class="email" :class="{ 'icon-loading-small-dark': loading, error: error }">
-				<input type="email" ref="email" required value="" :placeholder="l10n.email" id="emailprovider" :disabled="!init" />
-				<label for="submit-registration" class="btn btn-primary" :disabled="!init || loading">{{signUp}}</label>
-				<input type="submit" class="hidden" id="submit-registration" :value="signUp" :disabled="!init || loading" />
+	<div id="register" :class="{ 'init': init }" class="container revealOnLoad">
+		<form id="form" ref="register" :disabled="!init"
+			@submit.prevent="register">
+			<div :class="{ 'icon-loading-small-dark': loading, error: error }" class="email">
+				<input id="emailprovider" ref="email" :placeholder="l10n.email"
+					:disabled="!init" type="email" required
+					value="">
+				<label :disabled="!init || loading" for="submit-registration" class="btn btn-primary">{{ signUp }}</label>
+				<input id="submit-registration" :value="signUp" :disabled="!init || loading"
+					type="submit" class="hidden">
 			</div>
 			<div class="checkboxes">
 				<span>
-					<input type="checkbox" ref="tos" name="tos" id="tos" v-model="tosAgreed" required />
+					<input id="tos" ref="tos" v-model="tosAgreed"
+						type="checkbox" name="tos" required>
 					<label for="tos" class="tos">
 						{{ l10n.tosagree.split('%tos%')[0].replace(/ /g, '&nbsp;') }}
-						<a :href="selected.tos" target="_blank">{{l10n.tos}}</a>
+						<a :href="selected.tos" target="_blank">{{ l10n.tos }}</a>
 						{{ l10n.tosagree.split('%tos%')[1].replace(/ /g, '&nbsp;') }}
 					</label>
 				</span>
 				<span>
-					<input type="checkbox" ref="subscribe" name="subscribe" id="subscribe" />
+					<input id="subscribe" ref="subscribe" type="checkbox"
+						name="subscribe">
 					<label for="subscribe">
-						{{l10n.subscribe}}
+						{{ l10n.subscribe }}
 					</label>
 				</span>
 			</div>
 		</form>
-		<provider :provider="selected" :show="true" :init="init" class="selected-provider" :l10n="l10n" :officialApps="officialApps" :coreApps="coreApps" />
-		<div id="show-more" @click="toggleShowAll"
-			 :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}">
+		<provider :provider="selected" :show="true" :init="init"
+			:l10n="l10n" :official-apps="officialApps" :core-apps="coreApps"
+			class="selected-provider" />
+		<div id="show-more" :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}"
+			@click="toggleShowAll">
 			<span v-if="init">
-				 {{ showAll ? l10n.close : l10n.change }}
+				{{ showAll ? l10n.close : l10n.change }}
 			</span>
 		</div>
-		<div id="providers" v-if="showAll === true">
-			<provider v-for="(provider, key) in providers" :key="key" :init="init"  :provider="provider" :l10n="l10n" :officialApps="officialApps" :coreApps="coreApps" />
+		<div v-if="showAll === true" id="providers">
+			<provider v-for="(provider, key) in providers" :key="key" :init="init"
+				:provider="provider" :l10n="l10n" :official-apps="officialApps"
+				:core-apps="coreApps" />
 		</div>
 	</div>
 </template>
 
 <script>
-import provider from './Components/Provider';
-import VueScrollTo from 'vue-scrollto';
-import axios from 'axios';
-import Vue from 'vue';
+import provider from './Components/Provider'
+import VueScrollTo from 'vue-scrollto'
+import axios from 'axios'
 
 export default {
-	name: 'app',
+	name: 'App',
 	components: {
 		provider
 	},
@@ -74,73 +83,74 @@ export default {
 				far: 'Far far away',
 				geterror: 'Error while retrieving the providers list.',
 				tos: 'Terms of service',
-				tosagree: 'I agree to the %tos%'
+				tosagree: 'I agree to the %tos%',
+				toserror: 'Please agree to the terms of service'
 			}
-		};
-	},
-	beforeMount() {
-		// is this an ocs api request?
-		this.ocsapi = window.register.dataset.ocsapi === '1';
-
-		// init officialApps
-		this.officialApps = JSON.parse(window.register.dataset.officialapps);
-
-		this.coreApps = JSON.parse(window.register.dataset.coreapps);
-
-		// set location
-		let location = JSON.parse(window.register.dataset.ll);
-		if (location.latitude && location.longitude) {
-			this.ll = [location.latitude, location.longitude];
 		}
-		// retrieve providers list
-		this.getProviders();
-
-		// merge server translations into local ones
-		this.l10n = Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n));
 	},
 	computed: {
 		signUp() {
 			if (this.created) {
-				return this.l10n.success;
+				return this.l10n.success
 			} else if (this.error !== false) {
-				return this.l10n.error + ' ' + this.error;
+				return this.l10n.error + ' ' + this.error
 			} else if (this.loading) {
-				return this.l10n.processing;
+				return this.l10n.processing
 			}
-			return this.l10n.register;
+			return this.l10n.register
 		}
+	},
+	beforeMount() {
+		// is this an ocs api request?
+		this.ocsapi = window.register.dataset.ocsapi === '1'
+
+		// init officialApps
+		this.officialApps = JSON.parse(window.register.dataset.officialapps)
+
+		this.coreApps = JSON.parse(window.register.dataset.coreapps)
+
+		// set location
+		let location = JSON.parse(window.register.dataset.ll)
+		if (location.latitude && location.longitude) {
+			this.ll = [location.latitude, location.longitude]
+		}
+		// retrieve providers list
+		this.getProviders()
+
+		// merge server translations into local ones
+		this.l10n = Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n))
 	},
 	methods: {
 		getProviders() {
 			axios.get('/wp-json/signup/providers')
-			.then(response => {
-				this.providers = response.data;
-				this.scoreProvider(this.ll[0], this.ll[1]);
-			})
-			.catch(response => {
-				this.error = this.l10n.geterror;
-			});
+				.then(response => {
+					this.providers = response.data
+					this.scoreProvider(this.ll[0], this.ll[1])
+				})
+				.catch(response => {
+					this.error = this.l10n.geterror
+				})
 		},
 		// submit
 		register() {
 			if (this.error !== false) {
 				// user clicked again, let's reset the error
-				this.loading = false;
-				this.error = false;
-				return;
+				this.loading = false
+				this.error = false
+				return
 			}
 			if (!this.tosAgreed) {
-				this.error = this.l10n.error + ' ' + tos;
-				return;
+				this.error = this.l10n.toserror
+				return
 			}
-			this.toggleLoading();
-			this.showAll = false;
-			let email = this.$refs.email.value;
+			this.toggleLoading()
+			this.showAll = false
+			let email = this.$refs.email.value
 			let id = this.providers.findIndex(provider => {
-				return provider === this.selected;
-			});
-			let location = this.providers[id].selected;
-			let subscribe = this.$refs.subscribe.checked;
+				return provider === this.selected
+			})
+			let location = this.providers[id].selected
+			let subscribe = this.$refs.subscribe.checked
 			// success! redirection...
 			axios
 				.post('/wp-json/signup/account', {
@@ -151,59 +161,59 @@ export default {
 					subscribe
 				})
 				.then(response => {
-					this.created = true;
+					this.created = true
 					setTimeout(() => {
-						window.location = response.data;
-					}, 2000);
+						window.location = response.data
+					}, 2000)
 				})
 				.catch(error => {
-					this.error = error.response.data.message;
-					this.loading = false;
+					this.error = error.response.data.message
+					this.loading = false
 					setTimeout(() => {
-						this.showAll = true;
-						this.error = false;
-					}, 4000);
-				});
+						this.showAll = true
+						this.error = false
+					}, 4000)
+				})
 		},
 		// toggle showAll
 		toggleShowAll() {
 			if (this.loading || !this.init) {
-				this.showAll = false;
-				return;
+				this.showAll = false
+				return
 			}
-			this.showAll = !this.showAll;
+			this.showAll = !this.showAll
 			VueScrollTo.scrollTo(!this.showAll ? '#register' : '#form', 500, {
 				offset: -100
-			});
+			})
 		},
 		// toggle loading state
 		toggleLoading() {
-			this.loading = !this.loading;
+			this.loading = !this.loading
 		},
 		// convert deg to rad
 		deg2Rad(deg) {
-			return deg * Math.PI / 180;
+			return deg * Math.PI / 180
 		},
 		// return distance between two coordinates
 		pythagorasEquirectangular(lat1, lon1, lat2, lon2) {
-			lat1 = this.deg2Rad(lat1);
-			lat2 = this.deg2Rad(lat2);
-			lon1 = this.deg2Rad(lon1);
-			lon2 = this.deg2Rad(lon2);
+			lat1 = this.deg2Rad(lat1)
+			lat2 = this.deg2Rad(lat2)
+			lon1 = this.deg2Rad(lon1)
+			lon2 = this.deg2Rad(lon2)
 
-			let R = 6371; // km
-			let x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
-			let y = lat2 - lat1;
-			let d = Math.sqrt(x * x + y * y) * R;
+			let R = 6371 // km
+			let x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2)
+			let y = lat2 - lat1
+			let d = Math.sqrt(x * x + y * y) * R
 
-			return d;
+			return d
 		},
 		// add distance to provider
 		scoreProvider(latitude, longitude) {
-			let mindif = 99999;
+			let mindif = 99999
 			// let's test all of the providers and select the closest one
 			this.providers.forEach((provider, index) => {
-				let mindifprov = 99999;
+				let mindifprov = 99999
 				// let's test all of the locations and use the closest one as default for this provider
 				provider.locations.forEach(({ lat, long, city }, index) => {
 					let dif = this.pythagorasEquirectangular(
@@ -211,25 +221,25 @@ export default {
 						longitude,
 						lat,
 						long
-					);
+					)
 					// if score of this provider's loc is better than the previous, save it as default for this provider
 					if (dif < mindifprov) {
-						mindifprov = dif;
-						this.$set(provider, 'score', Math.round(dif));
-						this.$set(provider, 'city', city);
-						this.$set(provider, 'selected', index);
+						mindifprov = dif
+						this.$set(provider, 'score', Math.round(dif))
+						this.$set(provider, 'city', city)
+						this.$set(provider, 'selected', index)
 					}
-				});
+				})
 				// if score of this provider is better than the previous one, select it
 				if (mindifprov < mindif) {
-					mindif = mindifprov;
-					this.selected = provider;
+					mindif = mindifprov
+					this.selected = provider
 				}
-			});
-			this.init = true;
+			})
+			this.init = true
 		}
 	}
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -377,7 +387,7 @@ export default {
 		align-items: center;
 		cursor: pointer;
 		padding: 8px 0;
-		justify-content: center;		
+		justify-content: center;
 		&::before {
 			content: ' ';
 			display: block;

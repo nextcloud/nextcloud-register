@@ -1,7 +1,7 @@
 <template>
 	<!-- do not show selected -->
-	<div class="provider" :style="{order:order}"
-		 @click="selectProvider" v-if="selected !== provider || show">
+	<div v-if="selected !== provider || show" :style="{order:order}"
+		class="provider" @click="selectProvider">
 
 		<!-- loading svg while computing closest provider -->
 		<template v-if="!init">
@@ -9,120 +9,153 @@
 				:height="75"
 				:width="460"
 				:speed="2"
-				primaryColor="#bbb"
-				secondaryColor="#ccc"
+				primary-color="#bbb"
+				secondary-color="#ccc"
 			>
 				<!-- h3 -->
-				<rect x="0" y="0" rx="3" ry="3" width="150" height="22" /> 
+				<rect x="0" y="0" rx="3"
+					ry="3" width="150" height="22" />
 				<!-- p -->
-				<rect x="0" y="30" rx="3" ry="3" width="200" height="16" /> 
+				<rect x="0" y="30" rx="3"
+					ry="3" width="200" height="16" />
 				<!-- apps -->
-				<rect x="0" y="59" rx="3" ry="3" width="50" height="16" /> 
+				<rect x="0" y="59" rx="3"
+					ry="3" width="50" height="16" />
 				<!-- flags -->
-				<rect x="444" y="6" rx="1" ry="1" width="16" height="11" /> 
-				<rect x="423" y="6" rx="1" ry="1" width="16" height="11" /> 
-				<rect x="402" y="6" rx="1" ry="1" width="16" height="11" /> 
+				<rect x="444" y="6" rx="1"
+					ry="1" width="16" height="11" />
+				<rect x="423" y="6" rx="1"
+					ry="1" width="16" height="11" />
+				<rect x="402" y="6" rx="1"
+					ry="1" width="16" height="11" />
 				<!-- city -->
-				<rect x="410" y="30" rx="3" ry="3" width="50" height="16" /> 
+				<rect x="410" y="30" rx="3"
+					ry="3" width="50" height="16" />
 				<!-- distance -->
-				<rect x="420" y="53" rx="3" ry="3" width="40" height="16" />
+				<rect x="420" y="53" rx="3"
+					ry="3" width="40" height="16" />
 			</content-loader>
 		</template>
 
 		<!-- default template if all data loaded -->
 		<template v-else>
-			<div class="provider-logo" :style="{backgroundImage: 'url(' + provider.logo + ')'}" ></div>
-			<h3>{{provider.name}}</h3>
-			<p class="summary">{{provider.details}}</p>
+			<div :style="{backgroundImage: 'url(' + provider.logo + ')'}" class="provider-logo" />
+			<h3>{{ provider.name }}</h3>
+			<p class="summary">{{ provider.details }}</p>
 			<div class="details">
 				<span class="country">
 					<span v-for="(country, key) in provider.flags" :key="key"
 						:title="country"
-						:class="'flag-'+country"/>
+						:class="'flag-'+country" />
 				</span>
-				<span class="city">{{provider.city}}</span>
-				<span class="distance">{{distance}}</span>
-				<span class="freeplan">{{provider.freeplan}}</span>
+				<span class="city">{{ provider.city }}</span>
+				<span class="distance">{{ distance }}</span>
+				<span class="freeplan">{{ provider.freeplan }}</span>
 			</div>
 			<div class="apps">
-				<span v-for="(app, key) in coreApps" :key="key" class="core"
-					:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]" v-tooltip.bottom="officialApps[app]"></span>
-				<span v-for="(app, key) in apps" :key="key"
+				<span v-tooltip.bottom="officialApps[app]" v-for="(app, key) in coreApps" :key="key"
+					:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]" class="core" />
+				<span v-tooltip.bottom="officialApps[app]" v-for="(app, key) in apps"
 					v-if="officialApps.hasOwnProperty(app)"
-					:class="'app-'+app" v-tooltip.bottom="officialApps[app]"></span>
+					:key="key" :class="'app-'+app" />
 			</div>
 		</template>
 
 	</div>
 </template>
 <script>
-import VueScrollTo from 'vue-scrollto';
-import VTooltip from 'v-tooltip';
-import { ContentLoader } from 'vue-content-loader';
-import Vue from 'vue';
+import VueScrollTo from 'vue-scrollto'
+import VTooltip from 'v-tooltip'
+import { ContentLoader } from 'vue-content-loader'
+import Vue from 'vue'
 
-Vue.use(VTooltip);
+Vue.use(VTooltip)
 
-VTooltip.options.autoHide = false;
+VTooltip.options.autoHide = false
 
 export default {
-	name: 'provider',
-	props: ['provider', 'show', 'init', 'l10n', 'officialApps', 'coreApps'],
+	name: 'Provider',
 	components: {
 		ContentLoader
 	},
+	props: {
+		provider: {
+			type: Object,
+			default: () => {}
+		},
+		show: {
+			type: Boolean,
+			default: true
+		},
+		init: {
+			type: Boolean,
+			default: true
+		},
+		l10n: {
+			type: Object,
+			default: () => {}
+		},
+		officialApps: {
+			type: Array,
+			default: () => []
+		},
+		coreApps: {
+			type: Array,
+			default: () => []
+		}
+	},
 	computed: {
 		apps() {
-			return this.provider.apps.slice(0).sort(function (a, b) {
-				return a.localeCompare(b);
+			return this.provider.apps.slice(0).sort(function(a, b) {
+				return a.localeCompare(b)
 			})
 		},
 		distance() {
 			// Don't display distance bigger than 1000km
 			if (this.provider.score <= 1000) {
 				// rounding to the hundred
-				return '< ' + Math.round(this.provider.score / 100) * 100 + 'km';
+				return '< ' + Math.round(this.provider.score / 100) * 100 + 'km'
 			} else {
-				return this.l10n.far;
+				return this.l10n.far
 			}
 		},
 		selected: {
 			get() {
-				return this.$parent.selected;
+				return this.$parent.selected
 			},
 			set(provider) {
-				this.$parent.selected = provider;
+				this.$parent.selected = provider
 			}
 		},
 		showAll: {
 			get() {
-				return this.$parent.showAll;
+				return this.$parent.showAll
 			},
 			set(showAll) {
-				this.$parent.showAll = showAll;
+				this.$parent.showAll = showAll
 			}
 		},
 		order() {
 			// selected is first
 			if (this.selected === this.provider) {
-				return -1;
+				return -1
 			}
-			return this.provider.score;
+			return this.provider.score
 		}
 	},
 	methods: {
 		selectProvider() {
 			if (this.selected === this.provider) {
-				document.getElementById('emailprovider').focus();
-				return;
+				document.getElementById('emailprovider').focus()
+				return
 			}
-			this.selected = this.provider;
-			this.showAll = !this.showAll;
-			VueScrollTo.scrollTo('#register', 500, { offset: -50 });
-			document.getElementById('emailprovider').focus();
+			this.selected = this.provider
+			this.showAll = !this.showAll
+			VueScrollTo.scrollTo('#register', 500, { offset: -50 })
+			document.getElementById('emailprovider').focus()
 		}
 	}
-};
+}
 </script>
 
 <style lang='scss' scoped>
@@ -187,8 +220,8 @@ export default {
 		grid-row: 2;
 		-ms-grid-column: 2;
 		-ms-grid-row: 2;
-		/* line clamping now supported by all
-		   we also have a js fallback */
+		// line clamping now supported by all
+		// we also have a js fallback
 		overflow: hidden;
 		display: -webkit-box;
 		text-overflow: ellipsis;
