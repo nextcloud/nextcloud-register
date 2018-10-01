@@ -1,19 +1,23 @@
 <template>
 	<div id="register" :class="{ 'init': init }" class="container revealOnLoad">
 		<form id="form" ref="register" :disabled="!init"
-			@submit.prevent="register">
+			@submit.prevent="register"
+		>
 			<div :class="{ 'icon-loading-small-dark': loading, error: error }" class="email">
 				<input id="emailprovider" ref="email" :placeholder="l10n.email"
 					:disabled="!init" type="email" required
-					value="">
+					value=""
+				>
 				<label :disabled="!init || loading" for="submit-registration" class="btn btn-primary">{{ signUp }}</label>
 				<input id="submit-registration" :value="signUp" :disabled="!init || loading"
-					type="submit" class="hidden">
+					type="submit" class="hidden"
+				>
 			</div>
 			<div class="checkboxes">
 				<span>
 					<input id="tos" ref="tos" v-model="tosAgreed"
-						type="checkbox" name="tos" required>
+						type="checkbox" name="tos" required
+					>
 					<label for="tos" class="tos">
 						{{ l10n.tosagree.split('%tos%')[0].replace(/ /g, '&nbsp;') }}
 						<a :href="selected.tos" target="_blank">{{ l10n.tos }}</a>
@@ -22,7 +26,8 @@
 				</span>
 				<span>
 					<input id="subscribe" ref="subscribe" type="checkbox"
-						name="subscribe">
+						name="subscribe"
+					>
 					<label for="subscribe">
 						{{ l10n.subscribe }}
 					</label>
@@ -31,9 +36,11 @@
 		</form>
 		<provider :provider="selected" :show="true" :init="init"
 			:l10n="l10n" :official-apps="officialApps" :core-apps="coreApps"
-			class="selected-provider" />
+			class="selected-provider"
+		/>
 		<div id="show-more" :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}"
-			@click="toggleShowAll">
+			@click="toggleShowAll"
+		>
 			<span v-if="init">
 				{{ showAll ? l10n.close : l10n.change }}
 			</span>
@@ -41,7 +48,8 @@
 		<div v-if="showAll === true" id="providers">
 			<provider v-for="(provider, key) in providers" :key="key" :init="init"
 				:provider="provider" :l10n="l10n" :official-apps="officialApps"
-				:core-apps="coreApps" />
+				:core-apps="coreApps"
+			/>
 		</div>
 	</div>
 </template>

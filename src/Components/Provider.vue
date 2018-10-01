@@ -1,7 +1,8 @@
 <template>
 	<!-- do not show selected -->
 	<div v-if="selected !== provider || show" :style="{order:order}"
-		class="provider" @click="selectProvider">
+		class="provider" @click="selectProvider"
+	>
 
 		<!-- loading svg while computing closest provider -->
 		<template v-if="!init">
@@ -14,26 +15,34 @@
 			>
 				<!-- h3 -->
 				<rect x="0" y="0" rx="3"
-					ry="3" width="150" height="22" />
+					ry="3" width="150" height="22"
+				/>
 				<!-- p -->
 				<rect x="0" y="30" rx="3"
-					ry="3" width="200" height="16" />
+					ry="3" width="200" height="16"
+				/>
 				<!-- apps -->
 				<rect x="0" y="59" rx="3"
-					ry="3" width="50" height="16" />
+					ry="3" width="50" height="16"
+				/>
 				<!-- flags -->
 				<rect x="444" y="6" rx="1"
-					ry="1" width="16" height="11" />
+					ry="1" width="16" height="11"
+				/>
 				<rect x="423" y="6" rx="1"
-					ry="1" width="16" height="11" />
+					ry="1" width="16" height="11"
+				/>
 				<rect x="402" y="6" rx="1"
-					ry="1" width="16" height="11" />
+					ry="1" width="16" height="11"
+				/>
 				<!-- city -->
 				<rect x="410" y="30" rx="3"
-					ry="3" width="50" height="16" />
+					ry="3" width="50" height="16"
+				/>
 				<!-- distance -->
 				<rect x="420" y="53" rx="3"
-					ry="3" width="40" height="16" />
+					ry="3" width="40" height="16"
+				/>
 			</content-loader>
 		</template>
 
@@ -46,18 +55,22 @@
 				<span class="country">
 					<span v-for="(country, key) in provider.flags" :key="key"
 						:title="country"
-						:class="'flag-'+country" />
+						:class="'flag-'+country"
+					/>
 				</span>
 				<span class="city">{{ provider.city }}</span>
 				<span class="distance">{{ distance }}</span>
 				<span class="freeplan">{{ provider.freeplan }}</span>
 			</div>
 			<div class="apps">
-				<span v-tooltip.bottom="officialApps[app]" v-for="(app, key) in coreApps" :key="key"
-					:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]" class="core" />
-				<span v-tooltip.bottom="officialApps[app]" v-for="(app, key) in apps"
-					v-if="officialApps.hasOwnProperty(app)"
-					:key="key" :class="'app-'+app" />
+				<span v-for="(app, key) in coreApps" :key="key" v-tooltip.bottom="officialApps[app]"
+					:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]" class="core"
+				/>
+				<template v-if="officialApps.hasOwnProperty(app)">
+					<span v-for="(app, key) in apps" :key="key"
+						v-tooltip.bottom="officialApps[app]" :class="'app-'+app"
+					/>
+				</template>
 			</div>
 		</template>
 
