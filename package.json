@@ -1,7 +1,7 @@
 {
 	"name": "nextcloud-register",
 	"description": "Register a nextcloud account",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"author": "John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>",
 	"license": "AGPL-3.0",
 	"private": true,
