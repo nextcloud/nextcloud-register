@@ -8,7 +8,7 @@
 					:disabled="!init" type="email" required
 					value=""
 				>
-				<label :disabled="!init || loading" for="submit-registration" class="btn btn-primary">{{ signUp }}</label>
+				<label :disabled="!init || loading" for="submit-registration" class="button button--blue button--arrow">{{ signUp }}</label>
 				<input id="submit-registration" :value="signUp" :disabled="!init || loading"
 					type="submit" class="hidden"
 				>
@@ -332,11 +332,13 @@ export default {
 		border-radius: 22px 0 0 22px;
 		background-color: #fff;
 	}
-	> .btn-primary {
+	> .button--blue {
 		padding: 10px 60px 10px 20px;
 		height: 44px;
 		margin-left: -25px;
 		opacity: 1;
+		line-height: 22px;
+		cursor: pointer;
 		&::before {
 			right: 20px;
 		}
@@ -354,7 +356,7 @@ export default {
 			width: 0;
 			padding: 0;
 		}
-		> .btn-primary {
+		> .button--blue {
 			margin-left: 0;
 			width: 100%;
 			text-align: left;
