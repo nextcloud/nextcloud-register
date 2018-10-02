@@ -335,6 +335,7 @@ export default {
 	> .button--blue {
 		padding: 10px 60px 10px 20px;
 		height: 44px;
+		margin: 0;
 		margin-left: -25px;
 		opacity: 1;
 		line-height: 22px;
