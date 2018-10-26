@@ -55,7 +55,7 @@
 				<span class="country">
 					<span v-for="(country, key) in provider.flags" :key="key"
 						:title="country"
-						:class="'flag-'+country"
+						:class="'flag-icon-'+country"
 					/>
 				</span>
 				<span class="city">{{ provider.city }}</span>
@@ -262,6 +262,10 @@ export default {
 		.country span {
 			margin-left: 5px;
 			display: block;
+			width: 20px;
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
 		}
 	}
 	.apps {
