@@ -34,9 +34,9 @@
 				</span>
 			</div>
 		</form>
-		<provider :provider="selected" :show="true" :init="init"
-			:l10n="l10n" :official-apps="officialApps" :core-apps="coreApps"
-			class="selected-provider"
+		<provider v-if="selected" :provider="selected" :show="true"
+			:init="init" :l10n="l10n" :official-apps="officialApps"
+			:core-apps="coreApps" class="selected-provider"
 		/>
 		<div id="show-more" :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}"
 			@click="toggleShowAll"
@@ -46,7 +46,7 @@
 			</span>
 		</div>
 		<div v-if="showAll === true" id="providers">
-			<provider v-for="(provider, key) in providers" :key="key" :init="init"
+			<provider v-for="(provider, key) in filteredProviders" :key="key" :init="init"
 				:provider="provider" :l10n="l10n" :official-apps="officialApps"
 				:core-apps="coreApps"
 			/>
@@ -106,6 +106,9 @@ export default {
 				return this.l10n.processing
 			}
 			return this.l10n.register
+		},
+		filteredProviders() {
+			return this.providers.filter(provider => provider !== this.selected)
 		}
 	},
 	beforeMount() {

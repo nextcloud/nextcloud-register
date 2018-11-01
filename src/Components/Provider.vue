@@ -63,11 +63,11 @@
 				<span class="freeplan">{{ provider.freeplan }}</span>
 			</div>
 			<div class="apps">
-				<span v-for="(app, key) in coreApps" :key="key" v-tooltip.bottom="officialApps[app]"
+				<span v-for="(app, key) in coreApps" :key="`core-${key}`" v-tooltip.bottom="officialApps[app]"
 					:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]" class="core"
 				/>
-				<template v-if="officialApps.hasOwnProperty(app)">
-					<span v-for="(app, key) in apps" :key="key"
+				<template>
+					<span v-for="(app, key) in apps" :key="`app-${key}`"
 						v-tooltip.bottom="officialApps[app]" :class="'app-'+app"
 					/>
 				</template>
@@ -109,7 +109,7 @@ export default {
 			default: () => {}
 		},
 		officialApps: {
-			type: Array,
+			type: Object,
 			default: () => []
 		},
 		coreApps: {
@@ -119,9 +119,11 @@ export default {
 	},
 	computed: {
 		apps() {
-			return this.provider.apps.slice(0).sort(function(a, b) {
-				return a.localeCompare(b)
-			})
+			return this.provider.apps.slice(0)
+				.filter(app => this.officialApps.hasOwnProperty(app))
+				.sort(function(a, b) {
+					return a.localeCompare(b)
+				})
 		},
 		distance() {
 			// Don't display distance bigger than 1000km
