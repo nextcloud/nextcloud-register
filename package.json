@@ -25,27 +25,27 @@
 		"not ie <= 11"
 	],
 	"devDependencies": {
-		"@babel/core": "^7.1.6",
-		"@babel/preset-env": "^7.1.6",
-		"autoprefixer": "^9.3.1",
+		"@babel/core": "^7.2.0",
+		"@babel/preset-env": "^7.2.0",
+		"autoprefixer": "^9.4.3",
 		"babel-eslint": "^10.0.1",
 		"babel-loader": "^8.0.0",
-		"css-loader": "^1.0.1",
-		"eslint": "^5.9.0",
+		"css-loader": "^2.0.1",
+		"eslint": "^5.10.0",
 		"eslint-config-standard": "^12.0.0",
 		"eslint-loader": "^2.1.1",
 		"eslint-plugin-import": "^2.14.0",
 		"eslint-plugin-node": "^8.0.0",
 		"eslint-plugin-promise": "^4.0.1",
 		"eslint-plugin-standard": "^4.0.0",
-		"eslint-plugin-vue": "^5.0.0-beta.5",
-		"node-sass": "^4.10.0",
+		"eslint-plugin-vue": "^5.0.0",
+		"node-sass": "^4.11.0",
 		"postcss-loader": "^3.0.0",
 		"sass-loader": "^7.1.0",
 		"vue-loader": "^15.4.2",
-		"vue-template-compiler": "^2.5.21",
-		"webpack": "^4.26.1",
+		"vue-template-compiler": "^2.5.17",
+		"webpack": "^4.27.1",
 		"webpack-cli": "^3.1.2",
-		"webpack-merge": "^4.1.4"
+		"webpack-merge": "^4.1.5"
 	}
 }
