@@ -47,6 +47,8 @@ module.exports = {
 		'operator-linebreak': ['error', 'before'],
 		// ternary on multiline
 		'multiline-ternary': ['error', 'always-multiline'],
+		// kebab case components for vuejs
+		'vue/component-name-in-template-casing': ['error', 'kebab-case'],
 		// es6 import/export and require
 		'node/no-unpublished-require': ['off'],
 		'node/no-unsupported-features/es-syntax': ['off'],
