@@ -8,7 +8,9 @@
 					:disabled="!init" type="email" required
 					value=""
 				>
-				<label :disabled="!init || loading" for="submit-registration" class="button button--blue button--arrow">{{ signUp }}</label>
+				<label :disabled="!init || loading" for="submit-registration" class="button button--blue button--arrow">
+					{{ signUp }}
+				</label>
 				<input id="submit-registration" :value="signUp" :disabled="!init || loading"
 					type="submit" class="hidden"
 				>
@@ -20,7 +22,9 @@
 					>
 					<label for="tos" class="tos">
 						{{ l10n.tosagree.split('%tos%')[0].replace(/ /g, '&nbsp;') }}
-						<a :href="selected.tos" target="_blank">{{ l10n.tos }}</a>
+						<a :href="selected.tos" target="_blank">
+							{{ l10n.tos }}
+						</a>
 						{{ l10n.tosagree.split('%tos%')[1].replace(/ /g, '&nbsp;') }}
 					</label>
 				</span>
