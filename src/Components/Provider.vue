@@ -3,10 +3,9 @@
 	<div v-if="selected !== provider || show" :style="{order:order}"
 		class="provider" @click="selectProvider"
 	>
-
 		<!-- loading svg while computing closest provider -->
 		<template v-if="!init">
-			<content-loader
+			<ContentLoader
 				:height="75"
 				:width="460"
 				:speed="2"
@@ -43,14 +42,16 @@
 				<rect x="420" y="53" rx="3"
 					ry="3" width="40" height="16"
 				/>
-			</content-loader>
+			</ContentLoader>
 		</template>
 
 		<!-- default template if all data loaded -->
 		<template v-else>
 			<div :style="{backgroundImage: 'url(' + provider.logo + ')'}" class="provider-logo" />
 			<h3>{{ provider.name }}</h3>
-			<p class="summary">{{ provider.details }}</p>
+			<p class="summary">
+				{{ provider.details }}
+			</p>
 			<div class="details">
 				<span class="country">
 					<span v-for="(country, key) in provider.flags" :key="key"
@@ -58,9 +59,15 @@
 						:class="'flag-icon-'+country"
 					/>
 				</span>
-				<span class="city">{{ provider.city }}</span>
-				<span class="distance">{{ distance }}</span>
-				<span class="freeplan">{{ provider.freeplan }}</span>
+				<span class="city">
+					{{ provider.city }}
+				</span>
+				<span class="distance">
+					{{ distance }}
+				</span>
+				<span class="freeplan">
+					{{ provider.freeplan }}
+				</span>
 			</div>
 			<div class="apps">
 				<span v-for="(app, key) in coreApps" :key="`core-${key}`" v-tooltip.bottom="officialApps[app]"
@@ -73,7 +80,6 @@
 				</template>
 			</div>
 		</template>
-
 	</div>
 </template>
 <script>
