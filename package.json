@@ -18,7 +18,7 @@
 		"v-tooltip": "^2.0.0-rc.33",
 		"vue": "^2.6.9",
 		"vue-content-loader": "^0.2.1",
-		"vue-scrollto": "^2.14.0"
+		"vue-scrollto": "^2.15.0"
 	},
 	"browserslist": [
 		"last 2 versions",
