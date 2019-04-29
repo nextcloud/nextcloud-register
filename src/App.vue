@@ -1,25 +1,21 @@
 <template>
 	<div id="register" :class="{ 'init': init }" class="container revealOnLoad">
 		<form id="form" ref="register" :disabled="!init"
-			@submit.prevent="register"
-		>
+			@submit.prevent="register">
 			<div :class="{ 'icon-loading-small-dark': loading, error: error }" class="email">
 				<input id="emailprovider" ref="email" :placeholder="l10n.email"
 					:disabled="!init" type="email" required
-					value=""
-				>
+					value="">
 				<label :disabled="!init || loading" for="submit-registration" class="button button--blue button--arrow">
 					{{ signUp }}
 				</label>
 				<input id="submit-registration" :value="signUp" :disabled="!init || loading"
-					type="submit" class="hidden"
-				>
+					type="submit" class="hidden">
 			</div>
 			<div class="checkboxes">
 				<span>
 					<input id="tos" ref="tos" v-model="tosAgreed"
-						type="checkbox" name="tos" required
-					>
+						type="checkbox" name="tos" required>
 					<label for="tos" class="tos">
 						{{ l10n.tosagree.split('%tos%')[0].replace(/ /g, '&nbsp;') }}
 						<a :href="selected.tos" target="_blank">
@@ -30,43 +26,40 @@
 				</span>
 				<span>
 					<input id="subscribe" ref="subscribe" type="checkbox"
-						name="subscribe"
-					>
+						name="subscribe">
 					<label for="subscribe">
 						{{ l10n.subscribe }}
 					</label>
 				</span>
 			</div>
 		</form>
-		<provider v-if="selected" :provider="selected" :show="true"
+		<Provider v-if="selected" :provider="selected" :show="true"
 			:init="init" :l10n="l10n" :official-apps="officialApps"
-			:core-apps="coreApps" class="selected-provider"
-		/>
+			:core-apps="coreApps" class="selected-provider" />
 		<div id="show-more" :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}"
-			@click="toggleShowAll"
-		>
+			@click="toggleShowAll">
 			<span v-if="init">
 				{{ showAll ? l10n.close : l10n.change }}
 			</span>
 		</div>
 		<div v-if="showAll === true" id="providers">
-			<provider v-for="(provider, key) in filteredProviders" :key="key" :init="init"
-				:provider="provider" :l10n="l10n" :official-apps="officialApps"
-				:core-apps="coreApps"
-			/>
+			<Provider v-for="(provider, key) in filteredProviders" :key="key"
+				:init="init" :provider="provider"
+				:l10n="l10n" :official-apps="officialApps"
+				:core-apps="coreApps" />
 		</div>
 	</div>
 </template>
 
 <script>
-import provider from './Components/Provider'
+import Provider from './Components/Provider'
 import VueScrollTo from 'vue-scrollto'
 import axios from 'axios'
 
 export default {
 	name: 'App',
 	components: {
-		provider
+		Provider
 	},
 	data() {
 		return {
@@ -115,7 +108,7 @@ export default {
 			return this.providers.filter(provider => provider !== this.selected)
 		}
 	},
-	beforeMount() {
+	async beforeMount() {
 		// is this an ocs api request?
 		this.ocsapi = window.register.dataset.ocsapi === '1'
 
@@ -129,15 +122,25 @@ export default {
 		if (location.latitude && location.longitude) {
 			this.ll = [location.latitude, location.longitude]
 		}
-		// retrieve providers list
-		this.getProviders()
 
 		// merge server translations into local ones
 		this.l10n = Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n))
+
+		// retrieve providers list
+		await this.getProviders()
+
+		// select if in url
+		const hash = decodeURIComponent(window.location.hash.substr(1))
+		if (hash.trim() !== '') {
+			const providerIndex = this.providers.findIndex(prov => prov.name.toLowerCase().replace(' ', '_') === hash)
+			if (providerIndex > -1) {
+				this.selected = this.providers[providerIndex]
+			}
+		}
 	},
 	methods: {
-		getProviders() {
-			axios.get('/wp-json/signup/providers')
+		async getProviders() {
+			await axios.get('/wp-json/signup/providers')
 				.then(response => {
 					this.providers = response.data
 					this.scoreProvider(this.ll[0], this.ll[1])
@@ -248,7 +251,10 @@ export default {
 				// if score of this provider is better than the previous one, select it
 				if (mindifprov < mindif) {
 					mindif = mindifprov
-					this.selected = provider
+					// select default if none
+					if (!this.selected) {
+						this.selected = provider
+					}
 				}
 			})
 			this.init = true
