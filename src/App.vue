@@ -264,48 +264,59 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$height: 20px;
+
 #providers {
 	display: flex;
 	flex-direction: column;
+
 	margin: auto;
+
 	transform: translateY(15px);
-	opacity: 0;
 	animation: 1s ease-out 0s 1 slideUpOnLoad;
+
+	opacity: 0;
+
 	animation-fill-mode: forwards;
 }
 #show-more {
-	$height: 20px;
-	height: $height * 2;
+	position: relative;
+
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 100%;
-	text-align: center;
-	font-weight: 100;
-	cursor: pointer;
-	position: relative;
-	opacity: 0.5;
+
 	box-sizing: content-box;
+	width: 100%;
+	height: $height * 2;
+
+	cursor: pointer;
+	transition: all .2s ease-in;
+	text-align: center;
+
+	opacity: .5;
 	color: #fff;
-	transition: all 0.2s ease-in;
+
+	font-weight: 100;
+
 	span {
-		height: $height;
 		display: block;
+		height: $height;
 		line-height: $height;
 	}
 	&::before {
 		right: 50%;
-		transform: translateX(50%);
 		margin-right: -90px;
+		transform: translateX(50%);
 	}
 	&:hover,
 	&.opened {
-		opacity: 0.7;
+		opacity: .7;
 	}
 	&.opened {
 		&::before {
-			transform: scaleY(-1);
 			margin-right: -55px;
+			transform: scaleY(-1);
 		}
 	}
 	&.fadeout {
@@ -314,45 +325,54 @@ export default {
 }
 #form {
 	top: 30vh;
-	width: 100%;
-	padding: 0 10px;
+
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+
+	width: 100%;
+	padding: 0 10px;
 	&[disabled] {
-		opacity: 0.65;
+		opacity: .65;
 	}
 }
 .email {
 	display: flex;
 	align-items: center;
-	filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.3));
-	> input,
-	> label {
-		transition: all 0.2s ease-in;
+	filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .3));
+	& > input,
+	& > label {
+		transition: all .2s ease-in;
 		&:focus {
 			outline: none;
 		}
 	}
-	> input[type='email'] {
+	& > input[type='email'] {
+		flex: 1 0 auto;
+		/* flex grow to fit the parent width */
+
+		width: 0;
 		height: 44px;
 		padding: 5px 35px 5px 20px;
-		font-size: 18px;
-		/* flex grow to fit the parent width */
-		width: 0;
-		flex: 1 0 auto;
-		border-width: 0px;
+
+		border-width: 0;
 		border-radius: 22px 0 0 22px;
 		background-color: #fff;
+
+		font-size: 18px;
 	}
-	> .button--blue {
-		padding: 10px 60px 10px 20px;
+	& > .button--blue {
 		height: 44px;
+		min-height: 0;
 		margin: 0;
 		margin-left: -25px;
-		opacity: 1;
-		line-height: 22px;
+		padding: 10px 60px 10px 20px;
+
 		cursor: pointer;
+
+		opacity: 1;
+
+		line-height: 22px;
 		&::before {
 			right: 20px;
 		}
@@ -366,13 +386,14 @@ export default {
 			left: calc(100% - 32px);
 			box-sizing: content-box;
 		}
-		> input[type='email'] {
+		& > input[type='email'] {
 			width: 0;
 			padding: 0;
 		}
-		> .button--blue {
-			margin-left: 0;
+		& > .button--blue {
 			width: 100%;
+			margin-left: 0;
+
 			text-align: left;
 			&::before {
 				opacity: 0;
@@ -382,48 +403,57 @@ export default {
 }
 
 .checkboxes {
-	user-select: none;
 	position: relative;
+
 	display: flex;
-	flex-direction: column;
 	align-items: flex-start;
+	flex-direction: column;
+
 	margin: 0 auto;
+
+	user-select: none;
 	span {
 		position: relative;
 	}
 	input {
 		position: absolute;
-		opacity: 0;
 		top: 14px;
+
+		opacity: 0;
 		&:checked + label {
 			&, &::before {
+				content: '✓';
 				opacity: .7;
-				content: '✓'
 			}
 		}
 	}
 	label {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		padding: 8px 0;
+		cursor: pointer;
+		opacity: .5;
 		&, a {
 			color: #fff;
 		}
-		opacity: .5;
-		display: flex;
-		align-items: center;
-		cursor: pointer;
-		padding: 8px 0;
-		justify-content: center;
 		&::before {
-			content: ' ';
 			display: block;
-			font-weight: 600;
+
 			width: 15px; // align w/ email input
 			height: 15px;
-			line-height: 14px;
-			font-size: 14px;
+			margin-right: 5px;
+
+			content: ' ';
 			text-align: center;
+
 			border: 1px solid rgba(255, 255, 255, .7);
 			border-radius: 3px;
-			margin-right: 5px;
+
+			font-size: 14px;
+			font-weight: 600;
+			line-height: 14px;
 		}
 	}
 
@@ -443,4 +473,5 @@ export default {
 		opacity: 1;
 	}
 }
+
 </style>

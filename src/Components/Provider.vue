@@ -168,27 +168,33 @@ export default {
 
 <style lang='scss' scoped>
 .provider {
-	background: #fff;
-	margin: 10px;
-	padding: 10px;
 	position: relative;
 	// override display block after animation
+
 	display: -ms-grid !important;
 	display: grid !important;
+
+	margin: 10px;
+	padding: 10px;
+
+	user-select: none;
+	transition: all .2s ease-in;
+
+	border-radius: 5px;
+	background: #fff;
+
 	grid-template-columns: 75px 1fr;
 	-ms-grid-columns: 75px 1fr;
 	grid-template-rows: 25px 50px;
 	-ms-grid-rows: 25px 50px;
 	grid-auto-flow: column;
 	grid-column-gap: 10px;
-	border-radius: 5px;
-	user-select: none;
-	transition: all 0.2s ease-in;
 	&:not(.selected-provider) {
 		cursor: pointer;
-		filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.4));
+
+		filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .4));
 		&:hover {
-			filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5));
+			filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .5));
 		}
 	}
 	// loading svg
@@ -197,89 +203,113 @@ export default {
 	}
 	.provider-logo {
 		width: 75px;
+
+		background: transparent no-repeat center/contain;
+
 		grid-row: span 3;
 		-ms-grid-row-span: 3;
-		background: transparent no-repeat center/contain;
 		grid-column: 1;
 		-ms-grid-column: 1;
 	}
 	h3 {
-		margin: 0;
-		flex-grow: 1;
 		overflow: hidden;
+		flex-grow: 1;
+
+		margin: 0;
+
 		white-space: nowrap;
 		text-overflow: ellipsis;
+
+		color: #555;
+
 		font-size: 22px;
 		line-height: 22px;
-		color: #555;
+
 		grid-column: 2;
 		grid-row: 1;
 		-ms-grid-column: 2;
 		-ms-grid-row: 1;
 	}
 	p.summary {
-		font-weight: 100;
-		opacity: .9;
-		line-height: 25px;
+		display: -webkit-box;
+		// line clamping now supported by all
+		// we also have a js fallback
+		overflow: hidden;
+		-webkit-box-orient: vertical;
+
 		max-height: 50px; /* two lines */
 		margin: 0;
+
+		text-overflow: ellipsis;
+
+		opacity: .9;
 		color: #555;
+
+		font-weight: 100;
+		line-height: 25px;
+
 		grid-column: 2;
 		grid-row: 2;
 		-ms-grid-column: 2;
 		-ms-grid-row: 2;
-		// line clamping now supported by all
-		// we also have a js fallback
-		overflow: hidden;
-		display: -webkit-box;
-		text-overflow: ellipsis;
 		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
 	}
 	.details {
 		display: flex;
 		flex-direction: column;
+
 		text-align: right;
+
+		opacity: .9;
+
 		grid-column: 3;
 		-ms-grid-column: 3;
 		// h3 + p + apps
 		grid-row: span 3;
 		-ms-grid-row-span: 3;
-		opacity: .9;
 		span {
-			font-weight: 100;
 			display: flex;
-			height: 25px;
 			align-items: center;
 			justify-content: flex-end;
+
+			height: 25px;
+
 			white-space: nowrap;
+
+			font-weight: 100;
 		}
 		.country span {
-			margin-left: 5px;
 			display: block;
+
 			width: 20px;
-			background-size: contain;
+			margin-left: 5px;
+
 			background-repeat: no-repeat;
 			background-position: center;
+			background-size: contain;
 		}
 	}
 	.apps {
+		display: flex;
 		flex: 0 0 100%;
 		flex-wrap: wrap;
-		display: flex;
+
+		margin-left: -3px; // align the first icon to the text
+
 		grid-column: 2;
 		grid-row: 3;
 		-ms-grid-column: 2;
 		-ms-grid-row: 3;
-		margin-left: -3px; // align the first icon to the text
 		span {
-			background-position: center center;
-			opacity: 0.5;
-			height: 25px;
-			width: 25px;
-			max-width: 25px;
-			min-width: 18px;
 			flex: 1 1 18px;
+
+			width: 25px;
+			min-width: 18px;
+			max-width: 25px;
+			height: 25px;
+
+			opacity: .5;
+			background-position: center center;
 			&.core {
 				opacity: 1;
 				background-color: #0082c9;
@@ -287,10 +317,12 @@ export default {
 					display: flex;
 					margin-left: 3px;
 					&::before {
-						content: '';
-						border-radius: 3px 0 0 3px;
 						width: 3px;
 						margin-left: -3px;
+
+						content: '';
+
+						border-radius: 3px 0 0 3px;
 						background-color: inherit;
 					}
 				}
@@ -298,11 +330,13 @@ export default {
 					display: flex;
 					margin-right: 3px;
 					&::after {
-						content: '';
-						border-radius: 0 3px 3px 0;
 						width: 3px;
-						margin-left: 100%;
 						margin-right: -3px;
+						margin-left: 100%;
+
+						content: '';
+
+						border-radius: 0 3px 3px 0;
 						background-color: inherit;
 					}
 				}
@@ -310,38 +344,49 @@ export default {
 		}
 	}
 }
+
 </style>
 <style lang="scss">
 .vue-tooltip-theme {
-	background: #fff;
-	filter: drop-shadow(0 1px 4px rgba(0,0,0,.6));
-	border: solid 1px #f1f1f1;
-	border-radius: 4px;
-	transform-origin: left top;
-	will-change: transform;
 	position: absolute;
 	z-index: 5;
 	top: 100%;
-	font-size: 15px;
+
 	padding: 5px;
+
 	user-select: none;
+	transform-origin: left top;
+
+	border: solid 1px #f1f1f1;
+	border-radius: 4px;
+	background: #fff;
+
+	font-size: 15px;
+
+	filter: drop-shadow(0 1px 4px rgba(0,0,0,.6));
+	will-change: transform;
 	&::before {
-		content: "";
 		position: absolute;
 		top: 100%;
-		left: 50%;
 		right: auto;
-		transform: translateX(-50%);
-		height: 0;
+		left: 50%;
+
 		width: 0;
+		height: 0;
+
+		content: '';
+		transform: translateX(-50%);
+
 		border: 8px solid transparent;
 		border-top-color: #f1f1f1;
 	}
 	&[x-placement='bottom']::before {
-		bottom: 100%;
 		top: auto;
+		bottom: 100%;
+
 		border-top-color: transparent;
 		border-bottom-color: #f1f1f1;
 	}
 }
+
 </style>
