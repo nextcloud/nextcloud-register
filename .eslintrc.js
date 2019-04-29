@@ -1,7 +1,7 @@
 module.exports = {
 	root: true,
 	env: {
-		browser: false,
+		browser: true,
 		es6: true,
 		node: true,
 		jest: true
@@ -12,7 +12,8 @@ module.exports = {
 		OC: true,
 		OCA: true,
 		Vue: true,
-		VueRouter: true
+		VueRouter: true,
+		SCOPE_VERSION: true
 	},
 	parserOptions: {
 		parser: 'babel-eslint',
@@ -47,13 +48,20 @@ module.exports = {
 		'operator-linebreak': ['error', 'before'],
 		// ternary on multiline
 		'multiline-ternary': ['error', 'always-multiline'],
-		// kebab case components for vuejs
-		'vue/component-name-in-template-casing': ['error', 'kebab-case'],
 		// es6 import/export and require
 		'node/no-unpublished-require': ['off'],
 		'node/no-unsupported-features/es-syntax': ['off'],
+		// kebab case components for vuejs
+		'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+		// force name
+		'vue/match-component-file-name': ['error', {
+			'extensions': ['jsx', 'vue', 'js'],
+			'shouldMatchCase': true
+		 }],
 		// space before self-closing elements
 		'vue/html-closing-bracket-spacing': 'error',
+		// no ending html tag on a new line
+		'vue/html-closing-bracket-newline': ['error', { multiline: 'never' }],
 		// code spacing with attributes
 		'vue/max-attributes-per-line': [
 			'error',
