@@ -1,12 +1,12 @@
-const path = require('path');
-const { VueLoaderPlugin } = require('vue-loader');
+const path = require('path')
+const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
 	entry: path.join(__dirname, 'src', 'main.js'),
 	output: {
 		path: path.resolve(__dirname, '../assets/js/pages/'),
 		publicPath: '../assets/js/pages/',
-        filename: 'signup.js'
+		filename: 'signup.js'
 	},
 	module: {
 		rules: [
@@ -16,7 +16,12 @@ module.exports = {
 			},
 			{
 				test: /\.scss$/,
-				use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+				use: [
+					'vue-style-loader',
+					'css-loader',
+					'postcss-loader',
+					'sass-loader'
+				]
 			},
 			{
 				test: /\.(js|vue)$/,
@@ -41,4 +46,4 @@ module.exports = {
 		},
 		extensions: ['*', '.js', '.vue', '.json']
 	}
-};
+}
