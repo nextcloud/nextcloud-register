@@ -228,11 +228,8 @@ export default {
 		},
 		// add distance to provider
 		scoreProvider(latitude, longitude) {
-			let mindif = 99999
-			// let's test all of the providers and select the closest one
+			// set distance for every Provider
 			this.providers.forEach((provider, index) => {
-				let mindifprov = 99999
-				// let's test all of the locations and use the closest one as default for this provider
 				provider.locations.forEach(({ lat, long, city }, index) => {
 					let dif = this.pythagorasEquirectangular(
 						latitude,
@@ -240,23 +237,15 @@ export default {
 						lat,
 						long
 					)
-					// if score of this provider's loc is better than the previous, save it as default for this provider
-					if (dif < mindifprov) {
-						mindifprov = dif
-						this.$set(provider, 'score', Math.round(dif))
-						this.$set(provider, 'city', city)
-						this.$set(provider, 'selected', index)
-					}
+					this.$set(provider, 'score', Math.round(dif))
+					this.$set(provider, 'city', city)
 				})
-				// if score of this provider is better than the previous one, select it
-				if (mindifprov < mindif) {
-					mindif = mindifprov
-					// select default if none
-					if (!this.selected) {
-						this.selected = provider
-					}
-				}
 			})
+
+			// reduce Providers array to get the nearest Provider
+			if (!this.selected) {
+				this.selected = this.providers.reduce((prev, curr) => prev.score < curr.score ? prev : curr)
+			}
 			this.init = true
 		}
 	}
