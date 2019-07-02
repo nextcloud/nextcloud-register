@@ -230,21 +230,24 @@ export default {
 		scoreProvider(latitude, longitude) {
 			// set distance for every Provider
 			this.providers.forEach((provider, index) => {
-				provider.locations.forEach(({ lat, long, city }, index) => {
-					let dif = this.pythagorasEquirectangular(
+				provider.locations = provider.locations.map(({ lat, long, city }) => {
+					const score = Math.round(this.pythagorasEquirectangular(
 						latitude,
 						longitude,
 						lat,
 						long
-					)
-					this.$set(provider, 'score', Math.round(dif))
-					this.$set(provider, 'city', city)
+					))
+					return { lat, long, city, score }
 				})
 			})
 
 			// reduce Providers array to get the nearest Provider
 			if (!this.selected) {
-				this.selected = this.providers.reduce((prev, curr) => prev.score < curr.score ? prev : curr)
+				this.selected = this.providers.reduce((prev, curr) => {
+					// getting the max score amongst all locations for the desired provider
+					const currMaxScore = Math.max(...curr.locations.map(loc => loc.score))
+					return prev.score < currMaxScore ? prev : curr
+				})
 			}
 			this.init = true
 		}

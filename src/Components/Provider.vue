@@ -1,6 +1,6 @@
 <template>
 	<!-- do not show selected -->
-	<div v-if="selected !== provider || show" :style="{order:order}"
+	<div v-if="selected !== provider || show" :style="{ order }"
 		class="provider" @click="selectProvider">
 		<!-- loading svg while computing closest provider -->
 		<template v-if="!init">
@@ -49,7 +49,7 @@
 						:class="'flag-icon-'+country" />
 				</span>
 				<span class="city">
-					{{ provider.city }}
+					{{ city }}
 				</span>
 				<span class="distance">
 					{{ distance }}
@@ -120,12 +120,18 @@ export default {
 		},
 		distance() {
 			// Don't display distance bigger than 1000km
-			if (this.provider.score <= 1000) {
+			if (this.locations[0].score <= 1000) {
 				// rounding to the hundred
-				return '< ' + Math.round(this.provider.score / 100) * 100 + 'km'
+				return '< ' + Math.round(this.locations[0].score / 100) * 100 + 'km'
 			} else {
 				return this.l10n.far
 			}
+		},
+		locations() {
+			return this.provider.locations.slice().sort((a, b) => a.score - b.score)
+		},
+		city() {
+			return this.locations[0].city
 		},
 		selected: {
 			get() {
@@ -148,7 +154,7 @@ export default {
 			if (this.selected === this.provider) {
 				return -1
 			}
-			return this.provider.score
+			return this.locations[0].score
 		}
 	},
 	methods: {
