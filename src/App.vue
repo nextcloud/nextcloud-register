@@ -147,6 +147,7 @@ export default {
 				})
 				.catch(response => {
 					this.error = this.l10n.geterror
+					console.error(response)
 				})
 		},
 		// submit
@@ -243,11 +244,18 @@ export default {
 
 			// reduce Providers array to get the nearest Provider
 			if (!this.selected) {
-				this.selected = this.providers.reduce((prev, curr) => {
+				let minScore = 9999999999
+				this.providers.forEach(provider => {
 					// getting the max score amongst all locations for the desired provider
-					const currMaxScore = Math.max(...curr.locations.map(loc => loc.score))
-					return prev.score < currMaxScore ? prev : curr
+					const providerScores = provider.locations.map(loc => loc.score)
+					const providerMin = Math.min(...providerScores)
+					console.debug(provider.name, 'min score is', providerMin, `(amongst ${providerScores})`)
+					if (minScore > providerMin) {
+						this.selected = provider
+						minScore = providerMin
+					}
 				})
+				console.debug('Winning min score is', minScore, 'for', this.selected.name)
 			}
 			this.init = true
 		}
