@@ -1,7 +1,9 @@
 <template>
 	<!-- do not show selected -->
-	<div v-if="selected !== provider || show" :style="{ order }"
-		class="provider" @click="selectProvider">
+	<div v-if="selected !== provider || show"
+		:style="{ order }"
+		class="provider"
+		@click="selectProvider">
 		<!-- loading svg while computing closest provider -->
 		<template v-if="!init">
 			<ContentLoader
@@ -11,27 +13,59 @@
 				primary-color="#bbb"
 				secondary-color="#ccc">
 				<!-- h3 -->
-				<rect x="0" y="0" rx="3"
-					ry="3" width="150" height="22" />
+				<rect x="0"
+					y="0"
+					rx="3"
+					ry="3"
+					width="150"
+					height="22" />
 				<!-- p -->
-				<rect x="0" y="30" rx="3"
-					ry="3" width="200" height="16" />
+				<rect x="0"
+					y="30"
+					rx="3"
+					ry="3"
+					width="200"
+					height="16" />
 				<!-- apps -->
-				<rect x="0" y="59" rx="3"
-					ry="3" width="50" height="16" />
+				<rect x="0"
+					y="59"
+					rx="3"
+					ry="3"
+					width="50"
+					height="16" />
 				<!-- flags -->
-				<rect x="444" y="6" rx="1"
-					ry="1" width="16" height="11" />
-				<rect x="423" y="6" rx="1"
-					ry="1" width="16" height="11" />
-				<rect x="402" y="6" rx="1"
-					ry="1" width="16" height="11" />
+				<rect x="444"
+					y="6"
+					rx="1"
+					ry="1"
+					width="16"
+					height="11" />
+				<rect x="423"
+					y="6"
+					rx="1"
+					ry="1"
+					width="16"
+					height="11" />
+				<rect x="402"
+					y="6"
+					rx="1"
+					ry="1"
+					width="16"
+					height="11" />
 				<!-- city -->
-				<rect x="410" y="30" rx="3"
-					ry="3" width="50" height="16" />
+				<rect x="410"
+					y="30"
+					rx="3"
+					ry="3"
+					width="50"
+					height="16" />
 				<!-- distance -->
-				<rect x="420" y="53" rx="3"
-					ry="3" width="40" height="16" />
+				<rect x="420"
+					y="53"
+					rx="3"
+					ry="3"
+					width="40"
+					height="16" />
 			</ContentLoader>
 		</template>
 
@@ -44,7 +78,8 @@
 			</p>
 			<div class="details">
 				<span class="country">
-					<span v-for="(country, key) in provider.flags" :key="key"
+					<span v-for="(country, key) in provider.flags"
+						:key="key"
 						:title="country"
 						:class="'flag-icon-'+country" />
 				</span>
@@ -59,11 +94,16 @@
 				</span>
 			</div>
 			<div class="apps">
-				<span v-for="(app, key) in coreApps" :key="`core-${key}`" v-tooltip.bottom="officialApps[app]"
-					:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]" class="core" />
+				<span v-for="(app, key) in coreApps"
+					:key="`core-${key}`"
+					v-tooltip.bottom="officialApps[app]"
+					:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]"
+					class="core" />
 				<template>
-					<span v-for="(app, key) in apps" :key="`app-${key}`"
-						v-tooltip.bottom="officialApps[app]" :class="'app-'+app" />
+					<span v-for="(app, key) in apps"
+						:key="`app-${key}`"
+						v-tooltip.bottom="officialApps[app]"
+						:class="'app-'+app" />
 				</template>
 			</div>
 		</template>

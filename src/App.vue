@@ -1,21 +1,34 @@
 <template>
 	<div id="register" :class="{ 'init': init }" class="container revealOnLoad">
-		<form id="form" ref="register" :disabled="!init"
+		<form id="form"
+			ref="register"
+			:disabled="!init"
 			@submit.prevent="register">
 			<div :class="{ 'icon-loading-small-dark': loading, error: error }" class="email">
-				<input id="emailprovider" ref="email" :placeholder="l10n.email"
-					:disabled="!init" type="email" required
+				<input id="emailprovider"
+					ref="email"
+					:placeholder="l10n.email"
+					:disabled="!init"
+					type="email"
+					required
 					value="">
 				<label :disabled="!init || loading" for="submit-registration" class="button button--blue button--arrow">
 					{{ signUp }}
 				</label>
-				<input id="submit-registration" :value="signUp" :disabled="!init || loading"
-					type="submit" class="hidden">
+				<input id="submit-registration"
+					:value="signUp"
+					:disabled="!init || loading"
+					type="submit"
+					class="hidden">
 			</div>
 			<div class="checkboxes">
 				<span>
-					<input id="tos" ref="tos" v-model="tosAgreed"
-						type="checkbox" name="tos" required>
+					<input id="tos"
+						ref="tos"
+						v-model="tosAgreed"
+						type="checkbox"
+						name="tos"
+						required>
 					<label for="tos" class="tos">
 						{{ l10n.tosagree.split('%tos%')[0].replace(/ /g, '&nbsp;') }}
 						<a :href="selected.tos" target="_blank">
@@ -25,7 +38,9 @@
 					</label>
 				</span>
 				<span>
-					<input id="subscribe" ref="subscribe" type="checkbox"
+					<input id="subscribe"
+						ref="subscribe"
+						type="checkbox"
 						name="subscribe">
 					<label for="subscribe">
 						{{ l10n.subscribe }}
@@ -33,19 +48,28 @@
 				</span>
 			</div>
 		</form>
-		<Provider v-if="selected" :provider="selected" :show="true"
-			:init="init" :l10n="l10n" :official-apps="officialApps"
-			:core-apps="coreApps" class="selected-provider" />
-		<div id="show-more" :class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}"
+		<Provider v-if="selected"
+			:provider="selected"
+			:show="true"
+			:init="init"
+			:l10n="l10n"
+			:official-apps="officialApps"
+			:core-apps="coreApps"
+			class="selected-provider" />
+		<div id="show-more"
+			:class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}"
 			@click="toggleShowAll">
 			<span v-if="init">
 				{{ showAll ? l10n.close : l10n.change }}
 			</span>
 		</div>
 		<div v-if="showAll === true" id="providers">
-			<Provider v-for="(provider, key) in filteredProviders" :key="key"
-				:init="init" :provider="provider"
-				:l10n="l10n" :official-apps="officialApps"
+			<Provider v-for="(provider, key) in filteredProviders"
+				:key="key"
+				:init="init"
+				:provider="provider"
+				:l10n="l10n"
+				:official-apps="officialApps"
 				:core-apps="coreApps" />
 		</div>
 	</div>
