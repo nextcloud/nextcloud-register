@@ -122,33 +122,33 @@ VTooltip.options.autoHide = false
 export default {
 	name: 'Provider',
 	components: {
-		ContentLoader
+		ContentLoader,
 	},
 	props: {
 		provider: {
 			type: Object,
-			default: () => {}
+			default: () => {},
 		},
 		show: {
 			type: Boolean,
-			default: true
+			default: true,
 		},
 		init: {
 			type: Boolean,
-			default: true
+			default: true,
 		},
 		l10n: {
 			type: Object,
-			default: () => {}
+			default: () => {},
 		},
 		officialApps: {
 			type: Object,
-			default: () => []
+			default: () => [],
 		},
 		coreApps: {
 			type: Array,
-			default: () => []
-		}
+			default: () => [],
+		},
 	},
 	computed: {
 		apps() {
@@ -179,7 +179,7 @@ export default {
 			},
 			set(provider) {
 				this.$parent.selected = provider
-			}
+			},
 		},
 		showAll: {
 			get() {
@@ -187,7 +187,7 @@ export default {
 			},
 			set(showAll) {
 				this.$parent.showAll = showAll
-			}
+			},
 		},
 		order() {
 			// selected is first
@@ -195,7 +195,7 @@ export default {
 				return -1
 			}
 			return this.locations[0].score
-		}
+		},
 	},
 	methods: {
 		selectProvider() {
@@ -207,8 +207,8 @@ export default {
 			this.showAll = !this.showAll
 			VueScrollTo.scrollTo('#register', 500, { offset: -50 })
 			document.getElementById('emailprovider').focus()
-		}
-	}
+		},
+	},
 }
 </script>
 

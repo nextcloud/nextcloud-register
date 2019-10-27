@@ -83,23 +83,32 @@ import axios from 'axios'
 export default {
 	name: 'App',
 	components: {
-		Provider
+		Provider,
 	},
 	data() {
 		return {
 			// Default nextcloud location
 			ll: [48.7871141, 9.1547062],
-			selected: false,	// current selected provider
-			showAll: false,		// show all providers toggle
-			loading: false,		// submit loading
-			init: false,		// page init loading
-			providers: [],		// empty providers list
-			created: false,		// is the account creation successful
-			error: false,		// is the request successful
-			ocsapi: false,		// is the request made by an api
+			// current selected provider
+			selected: false,
+			// show all providers toggle
+			showAll: false,
+			// submit loading
+			loading: false,
+			// page init loading
+			init: false,
+			// empty providers list
+			providers: [],
+			// is the account creation successful
+			created: false,
+			// is the request successful
+			error: false,
+			// is the request made by an api
+			ocsapi: false,
 			officialApps: [],
 			coreApps: [],
-			tosAgreed: false,	// agreed to the tos ?
+			// agreed to the tos ?
+			tosAgreed: false,
 			l10n: {
 				subscribe: 'Subscribe to our newsletter',
 				email: 'Your email address',
@@ -113,8 +122,8 @@ export default {
 				geterror: 'Error while retrieving the providers list.',
 				tos: 'Terms of service',
 				tosagree: 'I agree to the %tos%',
-				toserror: 'Please agree to the terms of service'
-			}
+				toserror: 'Please agree to the terms of service',
+			},
 		}
 	},
 	computed: {
@@ -130,7 +139,7 @@ export default {
 		},
 		filteredProviders() {
 			return this.providers.filter(provider => provider !== this.selected)
-		}
+		},
 	},
 	async beforeMount() {
 		// is this an ocs api request?
@@ -142,7 +151,7 @@ export default {
 		this.coreApps = JSON.parse(window.register.dataset.coreapps)
 
 		// set location
-		let location = JSON.parse(window.register.dataset.ll)
+		const location = JSON.parse(window.register.dataset.ll)
 		if (location.latitude && location.longitude) {
 			this.ll = [location.latitude, location.longitude]
 		}
@@ -188,12 +197,12 @@ export default {
 			}
 			this.toggleLoading()
 			this.showAll = false
-			let email = this.$refs.email.value
-			let id = this.providers.findIndex(provider => {
+			const email = this.$refs.email.value
+			const id = this.providers.findIndex(provider => {
 				return provider === this.selected
 			})
-			let location = this.providers[id].selected
-			let subscribe = this.$refs.subscribe.checked
+			const location = this.providers[id].selected
+			const subscribe = this.$refs.subscribe.checked
 			// success! redirection...
 			axios
 				.post('/wp-json/signup/account', {
@@ -201,7 +210,7 @@ export default {
 					id,
 					location,
 					ocsapi: this.ocsapi,
-					subscribe
+					subscribe,
 				})
 				.then(response => {
 					this.created = true
@@ -226,7 +235,7 @@ export default {
 			}
 			this.showAll = !this.showAll
 			VueScrollTo.scrollTo(!this.showAll ? '#register' : '#form', 500, {
-				offset: -100
+				offset: -100,
 			})
 		},
 		// toggle loading state
@@ -244,10 +253,10 @@ export default {
 			lon1 = this.deg2Rad(lon1)
 			lon2 = this.deg2Rad(lon2)
 
-			let R = 6371 // km
-			let x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2)
-			let y = lat2 - lat1
-			let d = Math.sqrt(x * x + y * y) * R
+			const R = 6371 // km
+			const x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2)
+			const y = lat2 - lat1
+			const d = Math.sqrt(x * x + y * y) * R
 
 			return d
 		},
@@ -282,8 +291,8 @@ export default {
 				console.debug('Winning min score is', minScore, 'for', this.selected.name)
 			}
 			this.init = true
-		}
-	}
+		},
+	},
 }
 </script>
 
