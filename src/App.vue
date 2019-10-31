@@ -165,7 +165,7 @@ export default {
 		// select if in url
 		const hash = decodeURIComponent(window.location.hash.substr(1))
 		if (hash.trim() !== '') {
-			const providerIndex = this.providers.findIndex(prov => prov.name.toLowerCase().replace(' ', '_') === hash)
+			const providerIndex = this.providers.findIndex(prov => prov.name.toLowerCase().replace(/ /g, "_") === hash)
 			if (providerIndex > -1) {
 				this.selected = this.providers[providerIndex]
 			}
