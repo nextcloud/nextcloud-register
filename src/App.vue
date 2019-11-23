@@ -1,5 +1,5 @@
 <template>
-	<div id="register" :class="{ 'init': init }" class="container revealOnLoad">
+	<div id="register" :class="{ 'init': init }" class="container">
 		<form id="form"
 			ref="register"
 			:disabled="!init"
