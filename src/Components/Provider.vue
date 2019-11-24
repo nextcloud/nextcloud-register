@@ -159,8 +159,8 @@ export default {
 				})
 		},
 		distance() {
-			// Don't display distance bigger than 1000km
-			if (this.locations[0].score <= 1000) {
+			// Don't display distance bigger than 3000km
+			if (this.locations[0].score <= 3000) {
 				// rounding to the hundred
 				return '< ' + Math.round(this.locations[0].score / 100) * 100 + 'km'
 			} else {
