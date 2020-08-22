@@ -14,7 +14,7 @@
 	},
 	"dependencies": {
 		"@babel/polyfill": "^7.10.4",
-		"axios": "^0.19.2",
+		"axios": "^0.20.0",
 		"v-tooltip": "^2.0.3",
 		"vue": "^2.6.11",
 		"vue-content-loader": "^0.2.3",
