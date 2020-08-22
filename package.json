@@ -16,7 +16,7 @@
 		"@babel/polyfill": "^7.10.4",
 		"axios": "^0.20.0",
 		"v-tooltip": "^2.0.3",
-		"vue": "^2.6.11",
+		"vue": "^2.6.12",
 		"vue-content-loader": "^0.2.3",
 		"vue-scrollto": "^2.18.2"
 	},
@@ -45,7 +45,7 @@
 		"postcss-loader": "^3.0.0",
 		"sass-loader": "^9.0.3",
 		"vue-loader": "^15.9.3",
-		"vue-template-compiler": "^2.6.11",
+		"vue-template-compiler": "^2.6.12",
 		"webpack": "^4.44.1",
 		"webpack-cli": "^3.3.12",
 		"webpack-merge": "^5.1.1"
