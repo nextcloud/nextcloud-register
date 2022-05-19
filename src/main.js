@@ -1,10 +1,8 @@
-import '@babel/polyfill'
 import Vue from 'vue'
-import App from './App.vue'
+import Register from './Register.vue'
+import './assets/apps.scss'
 
-const app = new Vue({
+export const app = new Vue({
 	el: '#register',
-	render: h => h(App),
+	render: h => h(Register),
 })
-
-export { app }

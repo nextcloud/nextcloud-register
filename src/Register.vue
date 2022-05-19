@@ -4,7 +4,7 @@
 			ref="register"
 			:disabled="!init"
 			@submit.prevent="register">
-			<div :class="{ 'icon-loading-small-dark': loading, error: error }" class="email">
+			<div :class="{ error: error }" class="email">
 				<input id="emailprovider"
 					ref="email"
 					:placeholder="l10n.email"
@@ -12,14 +12,16 @@
 					type="email"
 					required
 					value="">
-				<label :disabled="!init || loading" for="submit-registration" class="button button--blue button--arrow">
+				<label :disabled="!init || loading" for="submit-registration" class="c-btn btn-blue">
 					{{ signUp }}
+					<ArrowRight v-if="!loading" title="" :size="20" />
+					<Loading v-else title="" :size="20" />
 				</label>
-				<input id="submit-registration"
+				<input v-show="false"
+					id="submit-registration"
 					:value="signUp"
 					:disabled="!init || loading"
-					type="submit"
-					class="hidden">
+					type="submit">
 			</div>
 			<div class="checkboxes">
 				<span>
@@ -56,12 +58,13 @@
 			:official-apps="officialApps"
 			:core-apps="coreApps"
 			class="selected-provider" />
-		<div id="show-more"
-			:class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}"
+		<div v-if="init"
+			id="show-more"
+			:class="{opened: showAll, fadeout: loading, 'button--dropdown': init}"
 			@click="toggleShowAll">
-			<span v-if="init">
-				{{ showAll ? l10n.close : l10n.change }}
-			</span>
+			{{ showAll ? l10n.close : l10n.change }}
+			<ChevronDown v-if="!showAll" title="" :size="16" />
+			<ChevronUp v-else title="" :size="16" />
 		</div>
 		<div v-if="showAll === true" id="providers">
 			<Provider v-for="(provider, key) in filteredProviders"
@@ -76,15 +79,25 @@
 </template>
 
 <script>
-import Provider from './Components/Provider'
+import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
+import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
+import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
+import Loading from 'vue-material-design-icons/Loading.vue'
+import Provider from './Components/Provider.vue'
 import VueScrollTo from 'vue-scrollto'
 import axios from 'axios'
 
 export default {
-	name: 'App',
+	name: 'Register',
+
 	components: {
+		ArrowRight,
+		ChevronDown,
+		ChevronUp,
+		Loading,
 		Provider,
 	},
+
 	data() {
 		return {
 			// Default nextcloud location
@@ -126,6 +139,7 @@ export default {
 			},
 		}
 	},
+
 	computed: {
 		signUp() {
 			if (this.created) {
@@ -141,7 +155,8 @@ export default {
 			return this.providers.filter(provider => provider !== this.selected)
 		},
 	},
-	async beforeMount() {
+
+	beforeMount() {
 		// is this an ocs api request?
 		this.ocsapi = window.register.dataset.ocsapi === '1'
 
@@ -160,20 +175,21 @@ export default {
 		this.l10n = Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n))
 
 		// retrieve providers list
-		await this.getProviders()
-
-		// select if in url
-		const hash = decodeURIComponent(window.location.hash.substr(1))
-		if (hash.trim() !== '') {
-			const providerIndex = this.providers.findIndex(prov => prov.name.toLowerCase().replace(/ /g, '_') === hash)
-			if (providerIndex > -1) {
-				this.selected = this.providers[providerIndex]
+		this.getProviders().then(() => {
+			// select if in url
+			const hash = decodeURIComponent(window.location.hash.substr(1))
+			if (hash.trim() !== '') {
+				const providerIndex = this.providers.findIndex(prov => prov.name.toLowerCase().replace(/ /g, '_') === hash)
+				if (providerIndex > -1) {
+					this.selected = this.providers[providerIndex]
+				}
 			}
-		}
+		})
 	},
+
 	methods: {
-		async getProviders() {
-			await axios.get('/wp-json/signup/providers')
+		getProviders() {
+			return axios.get('/wp-json/signup/providers')
 				.then(response => {
 					this.providers = response.data
 					this.scoreProvider(this.ll[0], this.ll[1])
@@ -183,6 +199,7 @@ export default {
 					console.error(response)
 				})
 		},
+
 		// submit
 		register() {
 			if (this.error !== false) {
@@ -302,76 +319,59 @@ $height: 20px;
 #providers {
 	display: flex;
 	flex-direction: column;
-
 	margin: auto;
-
 	transform: translateY(15px);
-	animation: 1s ease-out 0s 1 slideUpOnLoad;
-
+	animation: var(--provider-slide-up);
 	opacity: 0;
 
 	animation-fill-mode: forwards;
 }
+
 #show-more {
 	position: relative;
-
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
 	box-sizing: content-box;
 	width: 100%;
 	height: $height * 2;
-
 	cursor: pointer;
 	transition: all .2s ease-in;
 	text-align: center;
-
 	opacity: .5;
 	color: #fff;
-
 	font-weight: 100;
 
-	span {
-		display: block;
-		height: $height;
-		line-height: $height;
+	.chevron-down-icon,
+	.chevron-up-icon {
+		margin-left: 10px;
 	}
-	&::before {
-		right: 50%;
-		margin-right: -90px;
-		transform: translateX(50%);
-	}
+
 	&:hover,
 	&.opened {
 		opacity: .7;
-	}
-	&.opened {
-		&::before {
-			margin-right: -55px;
-			transform: scaleY(-1);
-		}
 	}
 	&.fadeout {
 		opacity: 0;
 	}
 }
+
 #form {
 	top: 30vh;
-
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-
 	width: 100%;
 	padding: 0 10px;
 	&[disabled] {
 		opacity: .65;
 	}
 }
+
 .email {
 	display: flex;
 	align-items: center;
+
 	filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .3));
 	& > input,
 	& > label {
@@ -383,67 +383,59 @@ $height: 20px;
 	& > input[type='email'] {
 		flex: 1 0 auto;
 		/* flex grow to fit the parent width */
-
 		width: 0;
 		height: 44px;
 		padding: 5px 35px 5px 20px;
-
 		border-width: 0;
 		border-radius: 22px 0 0 22px;
 		background-color: #fff;
-
 		font-size: 18px;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
-	& > .button--blue {
+	& > .btn-blue {
 		height: 44px;
 		min-height: 0;
 		margin: 0;
 		margin-left: -25px;
-		padding: 10px 60px 10px 20px;
-
+		padding: 10px 20px;
 		cursor: pointer;
-
 		opacity: 1;
-
-		line-height: 22px;
-		&::before {
-			right: 20px;
+		line-height: 18px;
+		min-width: 150px;
+		display: flex;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		max-width: 400px;
+		.arrow-right-icon,
+		.loading-icon {
+			margin-left: 10px;
+			transition: transform 200ms ease-in-out;
 		}
-		&:hover::before {
-			right: 10px;
+		&:hover .arrow-right-icon {
+			transform: translateX(10px);
+		}
+		.loading-icon {
+			animation: 1600ms spin cubic-bezier(0.55, 0.75, 0.65, 0.25) infinite;
 		}
 	}
-	&.icon-loading-small-dark,
+	&.icon-loading,
 	&.error {
 		&::after {
 			left: calc(100% - 32px);
 			box-sizing: content-box;
-		}
-		& > input[type='email'] {
-			width: 0;
-			padding: 0;
-		}
-		& > .button--blue {
-			width: 100%;
-			margin-left: 0;
-
-			text-align: left;
-			&::before {
-				opacity: 0;
-			}
 		}
 	}
 }
 
 .checkboxes {
 	position: relative;
-
 	display: flex;
 	align-items: flex-start;
 	flex-direction: column;
-
-	margin: 0 auto;
-
+	margin: 10px auto;
 	user-select: none;
 	span {
 		position: relative;
@@ -451,7 +443,6 @@ $height: 20px;
 	input {
 		position: absolute;
 		top: 14px;
-
 		opacity: 0;
 		&:checked + label {
 			&, &::before {
@@ -464,7 +455,6 @@ $height: 20px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-
 		padding: 8px 0;
 		cursor: pointer;
 		opacity: .5;
@@ -473,17 +463,13 @@ $height: 20px;
 		}
 		&::before {
 			display: block;
-
 			width: 15px; // align w/ email input
 			height: 15px;
 			margin-right: 5px;
-
 			content: ' ';
 			text-align: center;
-
 			border: 1px solid rgba(255, 255, 255, .7);
 			border-radius: 3px;
-
 			font-size: 14px;
 			font-weight: 600;
 			line-height: 14px;
@@ -496,14 +482,12 @@ $height: 20px;
 	}
 }
 
-@keyframes slideUpOnLoad {
+@keyframes spin {
 	0% {
-		transform: translateY(15px);
-		opacity: 0;
+		transform: rotate(0deg);
 	}
 	100% {
-		transform: translateY(0px);
-		opacity: 1;
+		transform: rotate(360deg);
 	}
 }
 
