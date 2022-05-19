@@ -60,7 +60,7 @@ export default {
 	name: 'Provider',
 
 	components: {
-		Placeholder
+		Placeholder,
 	},
 
 	props: {
