@@ -1,18 +1,20 @@
 <template>
-	<div id="register" :class="{ 'init': init }" class="container">
+	<div id="register" class="container">
 		<form id="form"
 			ref="register"
-			:disabled="!init"
+			:disabled="!initialized"
 			@submit.prevent="register">
+
+			<!-- Email input and submit -->
 			<div :class="{ error: error }" class="email">
 				<input id="emailprovider"
 					ref="email"
 					:placeholder="l10n.email"
-					:disabled="!init"
+					:disabled="!initialized"
 					type="email"
 					required
 					value="">
-				<label :disabled="!init || loading" for="submit-registration" class="c-btn btn-blue">
+				<label :disabled="!initialized || loading" for="submit-registration" class="c-btn btn-blue">
 					{{ signUp }}
 					<ArrowRight v-if="!loading" title="" :size="20" />
 					<Loading v-else title="" :size="20" />
@@ -20,14 +22,17 @@
 				<input v-show="false"
 					id="submit-registration"
 					:value="signUp"
-					:disabled="!init || loading"
+					:disabled="!initialized || loading"
 					type="submit">
 			</div>
+
+			<!-- TOS and newsletter checkbox -->
 			<div class="checkboxes">
 				<span>
 					<input id="tos"
 						ref="tos"
 						v-model="tosAgreed"
+						:disabled="!initialized"
 						type="checkbox"
 						name="tos"
 						required>
@@ -42,6 +47,7 @@
 				<span>
 					<input id="subscribe"
 						ref="subscribe"
+						:disabled="!initialized"
 						type="checkbox"
 						name="subscribe">
 					<label for="subscribe">
@@ -50,26 +56,31 @@
 				</span>
 			</div>
 		</form>
-		<Provider v-if="selected"
-			:provider="selected"
+
+		<!-- Selected closest provider -->
+		<Provider :provider="selected"
 			:show="true"
-			:init="init"
+			:initialized="initialized"
 			:l10n="l10n"
 			:official-apps="officialApps"
 			:core-apps="coreApps"
 			class="selected-provider" />
-		<div v-if="init"
+
+		<!-- Show more button -->
+		<div v-if="initialized"
 			id="show-more"
-			:class="{opened: showAll, fadeout: loading, 'button--dropdown': init}"
+			:class="{ opened: showAll, fadeout: loading}"
 			@click="toggleShowAll">
 			{{ showAll ? l10n.close : l10n.change }}
 			<ChevronDown v-if="!showAll" title="" :size="16" />
 			<ChevronUp v-else title="" :size="16" />
 		</div>
+
+		<!-- List of providers -->
 		<div v-if="showAll === true" id="providers">
 			<Provider v-for="(provider, key) in filteredProviders"
 				:key="key"
-				:init="init"
+				:initialized="initialized"
 				:provider="provider"
 				:l10n="l10n"
 				:official-apps="officialApps"
@@ -108,8 +119,8 @@ export default {
 			showAll: false,
 			// submit loading
 			loading: false,
-			// page init loading
-			init: false,
+			// page initialized
+			initialized: false,
 			// empty providers list
 			providers: [],
 			// is the account creation successful
@@ -246,7 +257,7 @@ export default {
 		},
 		// toggle showAll
 		toggleShowAll() {
-			if (this.loading || !this.init) {
+			if (this.loading || !this.initialized) {
 				this.showAll = false
 				return
 			}
@@ -307,7 +318,7 @@ export default {
 				})
 				console.debug('Winning min score is', minScore, 'for', this.selected.name)
 			}
-			this.init = true
+			this.initialized = true
 		},
 	},
 }

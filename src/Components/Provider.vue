@@ -1,49 +1,54 @@
 <template>
-	<!-- do not show selected -->
-	<div v-if="selected !== provider || show"
+	<!-- Show loading placeholder if not initialized -->
+	<div v-if="!initialized" class="provider provider--initialized">
+		<!-- loading svg while computing closest provider -->
+		<Placeholder />
+	</div>
+
+	<!-- Do not show selected -->
+	<div v-else-if="selected !== provider || show"
 		:style="{ order }"
-		:class="{'provider--init': init}"
 		class="provider"
 		@click="selectProvider">
-		<!-- loading svg while computing closest provider -->
-		<Placeholder v-if="!init" />
 
-		<!-- default template if all data loaded -->
-		<template v-else>
-			<div :style="{backgroundImage: 'url(' + provider.logo + ')'}" class="provider-logo" />
-			<h3>{{ provider.name }}</h3>
-			<p class="summary">
-				{{ provider.details }}
-			</p>
-			<div class="details">
-				<span class="country">
-					<span v-for="(country, key) in provider.flags"
-						:key="key"
-						:title="country"
-						:class="'flag-icon-'+country" />
-				</span>
-				<span class="city">
-					{{ city }}
-				</span>
-				<span class="distance">
-					{{ distance }}
-				</span>
-				<span class="freeplan">
-					{{ provider.freeplan }}
-				</span>
-			</div>
-			<div class="apps">
-				<span v-for="(app, key) in coreApps"
-					:key="`core-${key}`"
-					v-tooltip.bottom="officialApps[app]"
-					:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]"
-					class="core" />
-				<span v-for="(app, key) in apps"
-					:key="`app-${key}`"
-					v-tooltip.bottom="officialApps[app]"
-					:class="'app-'+app" />
-			</div>
-		</template>
+		<!-- Provider -->
+		<div :style="{backgroundImage: 'url(' + provider.logo + ')'}" class="provider-logo" />
+		<h3>{{ provider.name }}</h3>
+		<p class="summary">
+			{{ provider.details }}
+		</p>
+
+		<!-- Provider details -->
+		<div class="details">
+			<span class="country">
+				<span v-for="(country, key) in provider.flags"
+					:key="key"
+					:title="country"
+					:class="'flag-icon-'+country" />
+			</span>
+			<span class="city">
+				{{ city }}
+			</span>
+			<span class="distance">
+				{{ distance }}
+			</span>
+			<span class="freeplan">
+				{{ provider.freeplan }}
+			</span>
+		</div>
+
+		<!-- Apps list -->
+		<div class="apps">
+			<span v-for="(app, key) in coreApps"
+				:key="`core-${key}`"
+				v-tooltip.bottom="officialApps[app]"
+				:class="['app-'+app, { first: key === 0, last: key === coreApps.length - 1 }]"
+				class="core" />
+			<span v-for="(app, key) in apps"
+				:key="`app-${key}`"
+				v-tooltip.bottom="officialApps[app]"
+				:class="'app-'+app" />
+		</div>
 	</div>
 </template>
 <script>
@@ -72,7 +77,7 @@ export default {
 			type: Boolean,
 			default: true,
 		},
-		init: {
+		initialized: {
 			type: Boolean,
 			default: true,
 		},
@@ -188,7 +193,7 @@ export default {
 	}
 
 	// loading svg
-	.provider--init {
+	&.provider--initialized {
 		display: block !important;
 		svg {
 			width: 560px;
