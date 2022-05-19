@@ -177,7 +177,7 @@ export default {
 		// retrieve providers list
 		this.getProviders().then(() => {
 			// select if in url
-			const hash = decodeURIComponent(window.location.hash.substr(1))
+			const hash = decodeURIComponent(window.location.hash.slice(1))
 			if (hash.trim() !== '') {
 				const providerIndex = this.providers.findIndex(prov => prov.name.toLowerCase().replace(/ /g, '_') === hash)
 				if (providerIndex > -1) {
