@@ -4,7 +4,7 @@
 			ref="register"
 			:disabled="!init"
 			@submit.prevent="register">
-			<div :class="{ 'icon-loading-small-dark': loading, error: error }" class="email">
+			<div :class="{ error: error }" class="email">
 				<input id="emailprovider"
 					ref="email"
 					:placeholder="l10n.email"
@@ -14,7 +14,8 @@
 					value="">
 				<label :disabled="!init || loading" for="submit-registration" class="c-btn btn-blue">
 					{{ signUp }}
-					<ArrowRight title="" :size="20" />
+					<ArrowRight v-if="!loading" title="" :size="20" />
+					<Loading v-else title="" :size="20" />
 				</label>
 				<input v-show="false"
 					id="submit-registration"
@@ -57,12 +58,13 @@
 			:official-apps="officialApps"
 			:core-apps="coreApps"
 			class="selected-provider" />
-		<div id="show-more"
-			:class="{opened: showAll, fadeout: loading, 'button--dropdown': init, 'icon-loading-dark': !init}"
+		<div v-if="init"
+			id="show-more"
+			:class="{opened: showAll, fadeout: loading, 'button--dropdown': init}"
 			@click="toggleShowAll">
-			<span v-if="init">
-				{{ showAll ? l10n.close : l10n.change }}
-			</span>
+			{{ showAll ? l10n.close : l10n.change }}
+			<ChevronDown v-if="!showAll" title="" :size="16" />
+			<ChevronUp v-else title="" :size="16" />
 		</div>
 		<div v-if="showAll === true" id="providers">
 			<Provider v-for="(provider, key) in filteredProviders"
@@ -78,6 +80,9 @@
 
 <script>
 import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
+import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
+import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
+import Loading from 'vue-material-design-icons/Loading.vue'
 import Provider from './Components/Provider.vue'
 import VueScrollTo from 'vue-scrollto'
 import axios from 'axios'
@@ -87,6 +92,9 @@ export default {
 
 	components: {
 		ArrowRight,
+		ChevronDown,
+		ChevronUp,
+		Loading,
 		Provider,
 	},
 
@@ -334,25 +342,14 @@ $height: 20px;
 	color: #fff;
 	font-weight: 100;
 
-	span {
-		display: block;
-		height: $height;
-		line-height: $height;
+	.chevron-down-icon,
+	.chevron-up-icon {
+		margin-left: 10px;
 	}
-	&::before {
-		right: 50%;
-		margin-right: -90px;
-		transform: translateX(50%);
-	}
+
 	&:hover,
 	&.opened {
 		opacity: .7;
-	}
-	&.opened {
-		&::before {
-			margin-right: -55px;
-			transform: scaleY(-1);
-		}
 	}
 	&.fadeout {
 		opacity: 0;
@@ -412,31 +409,23 @@ $height: 20px;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		max-width: 400px;
-		.arrow-right-icon {
+		.arrow-right-icon,
+		.loading-icon {
 			margin-left: 10px;
 			transition: transform 200ms ease-in-out;
 		}
 		&:hover .arrow-right-icon {
 			transform: translateX(10px);
 		}
+		.loading-icon {
+			animation: 1600ms spin cubic-bezier(0.55, 0.75, 0.65, 0.25) infinite;
+		}
 	}
-	&.icon-loading-small-dark,
+	&.icon-loading,
 	&.error {
 		&::after {
 			left: calc(100% - 32px);
 			box-sizing: content-box;
-		}
-		& > input[type='email'] {
-			width: 0;
-			padding: 0;
-		}
-		& > .button--blue {
-			width: 100%;
-			margin-left: 0;
-			text-align: left;
-			&::before {
-				opacity: 0;
-			}
 		}
 	}
 }
@@ -493,14 +482,12 @@ $height: 20px;
 	}
 }
 
-@keyframes slideUpOnLoad {
+@keyframes spin {
 	0% {
-		transform: translateY(15px);
-		opacity: 0;
+		transform: rotate(0deg);
 	}
 	100% {
-		transform: translateY(0px);
-		opacity: 1;
+		transform: rotate(360deg);
 	}
 }
 
