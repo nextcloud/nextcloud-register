@@ -2,8 +2,8 @@
 	<ContentLoader :height="75"
 		:width="460"
 		:speed="2"
-		primary-color="#bbb"
-		secondary-color="#ccc">
+		primary-color="#ddd"
+		secondary-color="#eee">
 		<!-- h3 -->
 		<rect x="0"
 			y="0"
