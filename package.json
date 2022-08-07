@@ -1,35 +1,35 @@
 {
-	"name": "nextcloud-register",
-	"description": "Register a nextcloud account",
-	"version": "3.0.0",
-	"author": "John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>",
-	"license": "AGPL-3.0",
-	"private": true,
-	"scripts": {
-		"build": "webpack --node-env production --progress",
-		"dev": "webpack --node-env development --progress",
-		"watch": "webpack --node-env development --progress --watch",
-		"lint": "eslint --ext .js,.vue src",
-		"lint:fix": "eslint --ext .js,.vue src --fix",
-		"stylelint": "stylelint src",
-		"stylelint:fix": "stylelint src --fix"
-	},
-	"dependencies": {
-		"axios": "^0.27.2",
-		"v-tooltip": "^2.1.2",
-		"vue": "^2.7.0",
-		"vue-content-loader": "^0.2.3",
-		"vue-material-design-icons": "^5.1.1",
-		"vue-scrollto": "^2.20.0"
-	},
-	"engines": {
-		"node": "^14.0.0",
-		"npm": "^7.0.0"
-	},
-	"devDependencies": {
-		"@nextcloud/babel-config": "^1.0.0",
-		"@nextcloud/eslint-config": "^8.0.0",
-		"@nextcloud/stylelint-config": "^2.1.2",
-		"@nextcloud/webpack-vue-config": "^5.2.1"
-	}
+  "name": "nextcloud-register",
+  "description": "Register a nextcloud account",
+  "version": "3.0.0",
+  "author": "John Molakvoæ (skjnldsv) <skjnldsv@protonmail.com>",
+  "license": "AGPL-3.0",
+  "private": true,
+  "scripts": {
+    "build": "webpack --node-env production --progress",
+    "dev": "webpack --node-env development --progress",
+    "watch": "webpack --node-env development --progress --watch",
+    "lint": "eslint --ext .js,.vue src",
+    "lint:fix": "eslint --ext .js,.vue src --fix",
+    "stylelint": "stylelint src",
+    "stylelint:fix": "stylelint src --fix"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "v-tooltip": "^2.1.2",
+    "vue": "^2.7.0",
+    "vue-content-loader": "^0.2.3",
+    "vue-material-design-icons": "^5.1.1",
+    "vue-scrollto": "^2.20.0"
+  },
+  "engines": {
+    "node": "^16.0.0",
+    "npm": "^7.0.0 || ^8.0.0"
+  },
+  "devDependencies": {
+    "@nextcloud/babel-config": "^1.0.0",
+    "@nextcloud/eslint-config": "^8.0.0",
+    "@nextcloud/stylelint-config": "^2.1.2",
+    "@nextcloud/webpack-vue-config": "^5.2.1"
+  }
 }
