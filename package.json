@@ -15,7 +15,7 @@
     "stylelint:fix": "stylelint src --fix"
   },
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.2.0",
     "v-tooltip": "^2.1.2",
     "vue": "^2.7.0",
     "vue-content-loader": "^0.2.3",
