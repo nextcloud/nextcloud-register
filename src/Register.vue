@@ -4,7 +4,6 @@
 			ref="register"
 			:disabled="!initialized"
 			@submit.prevent="register">
-
 			<!-- Email input and submit -->
 			<div :class="{ error: error }" class="email">
 				<input id="emailprovider"
@@ -80,11 +79,13 @@
 		<div v-if="showAll === true" id="providers">
 			<Provider v-for="(provider, key) in filteredProviders"
 				:key="key"
+				:core-apps="coreApps"
 				:initialized="initialized"
-				:provider="provider"
 				:l10n="l10n"
 				:official-apps="officialApps"
-				:core-apps="coreApps" />
+				:provider="provider"
+				:selected="provider === selected"
+				@select="onSelect(provider)" />
 		</div>
 	</div>
 </template>
@@ -114,7 +115,10 @@ export default {
 			// Default nextcloud location
 			ll: [48.7871141, 9.1547062],
 			// current selected provider
-			selected: false,
+			selected: {
+				locations: [],
+				apps: [],
+			},
 			// show all providers toggle
 			showAll: false,
 			// submit loading
@@ -170,20 +174,23 @@ export default {
 	beforeMount() {
 		// is this an ocs api request?
 		this.ocsapi = window.register.dataset.ocsapi === '1'
-
-		// init officialApps
-		this.officialApps = JSON.parse(window.register.dataset.officialapps)
-
-		this.coreApps = JSON.parse(window.register.dataset.coreapps)
-
-		// set location
-		const location = JSON.parse(window.register.dataset.ll)
-		if (location.latitude && location.longitude) {
-			this.ll = [location.latitude, location.longitude]
+		if (this.ocsapi) {
+			console.debug('This registration will be treated as an OCS API request', this.ocsapi)
 		}
 
 		// merge server translations into local ones
 		this.l10n = Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n))
+
+		// init apps
+		this.officialApps = JSON.parse(window.register.dataset.officialapps)
+		this.coreApps = JSON.parse(window.register.dataset.coreapps)
+
+		// set location
+		const location = JSON.parse(window.register.dataset.ll)
+		console.debug('Location data', location)
+		if (location.latitude && location.longitude) {
+			this.ll = [location.latitude, location.longitude]
+		}
 
 		// retrieve providers list
 		this.getProviders().then(() => {
@@ -194,7 +201,13 @@ export default {
 				if (providerIndex > -1) {
 					this.selected = this.providers[providerIndex]
 				}
+			} else {
+				const minScores = this.providers.map(provider => Math.min.apply(null, provider.locations.map(location => location.score)))
+				const minScore = Math.min.apply(null, minScores)
+				const providerIndex = minScores.findIndex(score => score === minScore)
+				this.selected = this.providers[providerIndex]
 			}
+			console.debug('Selected provider', this.selected)
 		})
 	},
 
@@ -219,30 +232,36 @@ export default {
 				this.error = false
 				return
 			}
+
 			if (!this.tosAgreed) {
 				this.error = this.l10n.toserror
 				return
 			}
+
 			this.toggleLoading()
 			this.showAll = false
+
+			const subscribe = this.$refs.subscribe.checked
 			const email = this.$refs.email.value
 			const id = this.providers.findIndex(provider => {
 				return provider === this.selected
 			})
-			const location = this.providers[id].selected
-			const subscribe = this.$refs.subscribe.checked
-			// success! redirection...
-			axios
-				.post('/wp-json/signup/account', {
-					email,
-					id,
-					location,
-					ocsapi: this.ocsapi,
-					subscribe,
-				})
+
+			const scores = this.selected.locations.map(location => location.score)
+			const closest = Math.min.apply(null, scores)
+			const location = this.selected.locations.findIndex(location => location.score === closest)
+
+			axios.post('/wp-json/signup/account', {
+				email,
+				id,
+				location,
+				ocsapi: this.ocsapi,
+				subscribe,
+			})
 				.then(response => {
 					this.created = true
 					setTimeout(() => {
+						// success! redirection...
 						window.location = response.data
 					}, 2000)
 				})
@@ -255,6 +274,7 @@ export default {
 					}, 4000)
 				})
 		},
+
 		// toggle showAll
 		toggleShowAll() {
 			if (this.loading || !this.initialized) {
@@ -266,14 +286,17 @@ export default {
 				offset: -100,
 			})
 		},
+
 		// toggle loading state
 		toggleLoading() {
 			this.loading = !this.loading
 		},
+
 		// convert deg to rad
 		deg2Rad(deg) {
 			return deg * Math.PI / 180
 		},
+
 		// return distance between two coordinates
 		pythagorasEquirectangular(lat1, lon1, lat2, lon2) {
 			lat1 = this.deg2Rad(lat1)
@@ -288,6 +311,7 @@ export default {
 
 			return d
 		},
+
 		// add distance to provider
 		scoreProvider(latitude, longitude) {
 			// set distance for every Provider
@@ -319,6 +343,13 @@ export default {
 				console.debug('Winning min score is', minScore, 'for', this.selected.name)
 			}
 			this.initialized = true
+		},
+
+		// user selected a provider
+		onSelect(provider) {
+			console.debug('Selected provider', provider.name, provider)
+			this.selected = provider
+			this.showAll = false
 		},
 	},
 }
