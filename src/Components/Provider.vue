@@ -10,7 +10,6 @@
 		:style="{ order }"
 		class="provider"
 		@click="selectProvider">
-
 		<!-- Provider -->
 		<div :style="{backgroundImage: 'url(' + provider.logo + ')'}" class="provider-logo" />
 		<h3>{{ provider.name }}</h3>
@@ -93,6 +92,10 @@ export default {
 			type: Array,
 			default: () => [],
 		},
+		selected: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
@@ -105,7 +108,7 @@ export default {
 		},
 		distance() {
 			// Don't display distance bigger than 3000km
-			if (this.locations[0].score <= 3000) {
+			if (this.locations[0]?.score <= 3000) {
 				// rounding to the hundred
 				return '< ' + Math.round(this.locations[0].score / 100) * 100 + 'km'
 			} else {
@@ -113,44 +116,31 @@ export default {
 			}
 		},
 		locations() {
-			return this.provider.locations.slice().sort((a, b) => a.score - b.score)
+			// Clone and sort locations
+			return this.provider.locations.slice()
+				.sort((a, b) => a.score - b.score)
 		},
 		city() {
-			return this.locations[0].city
-		},
-		selected: {
-			get() {
-				return this.$parent.selected
-			},
-			set(provider) {
-				this.$parent.selected = provider
-			},
-		},
-		showAll: {
-			get() {
-				return this.$parent.showAll
-			},
-			set(showAll) {
-				this.$parent.showAll = showAll
-			},
+			// Sorted locations, first is closest
+			return this.locations[0]?.city || ''
 		},
 		order() {
 			// selected is first
-			if (this.selected === this.provider) {
+			if (this.selected) {
 				return -1
 			}
-			return this.locations[0].score
+			return this.locations[0]?.score || 0
 		},
 	},
 
 	methods: {
 		selectProvider() {
-			if (this.selected === this.provider) {
+			if (this.selected) {
 				document.getElementById('emailprovider').focus()
 				return
 			}
-			this.selected = this.provider
-			this.showAll = !this.showAll
+
+			this.$emit('select')
 			VueScrollTo.scrollTo('#register', 500, { offset: -50 })
 			document.getElementById('emailprovider').focus()
 		},
