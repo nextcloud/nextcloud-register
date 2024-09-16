@@ -48,6 +48,8 @@
 				v-tooltip.bottom="officialApps[app]"
 				:class="'app-'+app" />
 		</div>
+
+
 	</div>
 </template>
 <script>
@@ -154,10 +156,10 @@ export default {
 	// override display block after animation
 	display: grid !important;
 	margin: 10px;
-	padding: 10px;
+	padding: 15px;
 	user-select: none;
 	transition: all .2s ease-in;
-	border-radius: 5px;
+	border-radius: 15px;
 	background: #fff;
 	font-size: 15px;
 
@@ -176,9 +178,9 @@ export default {
 	&:not(.selected-provider) {
 		cursor: pointer;
 
-		filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .4));
+		filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .1));
 		&:hover {
-			filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .5));
+			filter: drop-shadow(0 2px 5px rgba(0, 0, 0, .1));
 		}
 	}
 
@@ -335,7 +337,7 @@ export default {
 	font-size: 15px;
 	opacity: 1;
 
-	filter: drop-shadow(0 1px 4px rgba(0,0,0,.6));
+	filter: drop-shadow(0 3px 6px rgba(0,0,0,.3));
 	will-change: transform;
 	&::before {
 		position: absolute;

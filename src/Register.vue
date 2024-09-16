@@ -15,7 +15,7 @@
 					value="">
 				<label :disabled="!initialized || loading" for="submit-registration" class="c-btn btn-blue">
 					{{ signUp }}
-					<ArrowRight v-if="!loading" title="" :size="20" />
+					<ChevronRight v-if="!loading" title="" :size="20" />
 					<Loading v-else title="" :size="20" />
 				</label>
 				<input v-show="false"
@@ -91,7 +91,8 @@
 </template>
 
 <script>
-import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
+//import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
+import ChevronRight from 'vue-material-design-icons/ChevronRight.vue'
 import ChevronDown from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronUp from 'vue-material-design-icons/ChevronUp.vue'
 import Loading from 'vue-material-design-icons/Loading.vue'
@@ -103,7 +104,7 @@ export default {
 	name: 'Register',
 
 	components: {
-		ArrowRight,
+		ChevronRight,
 		ChevronDown,
 		ChevronUp,
 		Loading,
@@ -414,7 +415,8 @@ $height: 20px;
 	display: flex;
 	align-items: center;
 
-	filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .3));
+	filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .1));
+
 	& > input,
 	& > label {
 		transition: all .2s ease-in;
@@ -437,7 +439,7 @@ $height: 20px;
 		text-overflow: ellipsis;
 	}
 	& > .btn-blue {
-		height: 44px;
+		//height: 44px;
 		min-height: 0;
 		margin: 0;
 		margin-left: -25px;
@@ -445,18 +447,21 @@ $height: 20px;
 		cursor: pointer;
 		opacity: 1;
 		line-height: 18px;
-		min-width: 150px;
+		min-width: auto;
 		display: flex;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		max-width: 400px;
+
+		.chevron-right-icon,
 		.arrow-right-icon,
 		.loading-icon {
-			margin-left: 10px;
+			//margin-left: 10px;
 			transition: transform 200ms ease-in-out;
 		}
-		&:hover .arrow-right-icon {
+		&:hover .arrow-right-icon,
+		&:hover .chevron-right-icon {
 			transform: translateX(10px);
 		}
 		.loading-icon {
