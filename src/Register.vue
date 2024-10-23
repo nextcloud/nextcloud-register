@@ -431,7 +431,7 @@ $height: 20px;
 		height: 44px;
 		padding: 5px 35px 5px 20px;
 		border-width: 0;
-		border-radius: 22px 0 0 22px;
+		border-radius: 8px 0 0 8px;
 		background-color: #fff;
 		font-size: 18px;
 		overflow: hidden;
@@ -534,5 +534,4 @@ $height: 20px;
 		transform: rotate(360deg);
 	}
 }
-
 </style>
