@@ -23,7 +23,7 @@
 				<span v-for="(country, key) in provider.flags"
 					:key="key"
 					:title="country"
-					:class="'flag-icon-'+country" />
+					:class="'fi-'+country" />
 			</span>
 			<span class="city">
 				{{ city }}
@@ -55,6 +55,8 @@ import Placeholder from './Placeholder.vue'
 import VueScrollTo from 'vue-scrollto'
 import VTooltip from 'v-tooltip'
 import Vue from 'vue'
+
+import 'flag-icons/css/flag-icons.min.css'
 
 Vue.use(VTooltip)
 
