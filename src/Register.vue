@@ -534,5 +534,4 @@ $height: 20px;
 		transform: rotate(360deg);
 	}
 }
-
 </style>
