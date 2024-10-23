@@ -133,7 +133,7 @@ export default {
 			error: false,
 			// is the request made by an api
 			ocsapi: false,
-			officialApps: [],
+			officialApps: {},
 			coreApps: [],
 			// agreed to the tos ?
 			tosAgreed: false,
@@ -173,20 +173,22 @@ export default {
 
 	beforeMount() {
 		// is this an ocs api request?
-		this.ocsapi = window.register.dataset.ocsapi === '1'
+		this.ocsapi = window.register?.dataset?.ocsapi === '1'
 		if (this.ocsapi) {
 			console.debug('This registration will be treated as an OCS API request', this.ocsapi)
 		}
 
 		// merge server translations into local ones
-		this.l10n = Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n))
+		this.l10n = window.register?.dataset?.l10n
+			? Object.assign(this.l10n, JSON.parse(window.register.dataset.l10n || '{}'))
+			: this.l10n
 
 		// init apps
-		this.officialApps = JSON.parse(window.register.dataset.officialapps)
-		this.coreApps = JSON.parse(window.register.dataset.coreapps)
+		this.officialApps = JSON.parse(window.register?.dataset?.officialapps || '{}')
+		this.coreApps = JSON.parse(window.register?.dataset?.coreapps || '[]')
 
 		// set location
-		const location = JSON.parse(window.register.dataset.ll)
+		const location = JSON.parse(window.register?.dataset?.ll || '{}')
 		console.debug('Location data', location)
 		if (location.latitude && location.longitude) {
 			this.ll = [location.latitude, location.longitude]
@@ -213,7 +215,7 @@ export default {
 
 	methods: {
 		getProviders() {
-			return axios.get('/wp-json/signup/providers')
+			return axios.get(providersUrl)
 				.then(response => {
 					this.providers = response.data
 					this.scoreProvider(this.ll[0], this.ll[1])
@@ -321,7 +323,7 @@ export default {
 						latitude,
 						longitude,
 						lat,
-						long
+						long,
 					))
 					return { lat, long, city, score }
 				})
