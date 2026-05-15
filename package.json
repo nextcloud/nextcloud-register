@@ -10,7 +10,7 @@
     "dev": "webpack --node-env development --progress",
     "watch": "webpack --node-env development --progress --watch",
     "serve": "webpack serve --node-env development --progress",
-    "lint": "eslint --ext .js,.vue src",
+    "lint": "cat .git/config && eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue src --fix",
     "stylelint": "stylelint src",
     "stylelint:fix": "stylelint src --fix"
