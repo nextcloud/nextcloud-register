@@ -133,6 +133,8 @@ export default {
 			error: false,
 			// is the request made by an api
 			ocsapi: false,
+			// the new V3 flow - used by the desktop client
+			flow: false,
 			officialApps: {},
 			coreApps: [],
 			// agreed to the tos ?
@@ -176,6 +178,12 @@ export default {
 		this.ocsapi = window.register?.dataset?.ocsapi === '1'
 		if (this.ocsapi) {
 			console.debug('This registration will be treated as an OCS API request', this.ocsapi)
+		}
+
+		// is this desktop client V3 request?
+		this.flow = window.register?.dataset?.flow || false
+		if (this.flow) {
+			console.debug('This registration will be treated as a V3 request for the desktop client', this.flow)
 		}
 
 		// merge server translations into local ones
@@ -259,6 +267,7 @@ export default {
 				location,
 				ocsapi: this.ocsapi,
 				subscribe,
+				flow: this.flow,
 			})
 				.then(response => {
 					this.created = true
